@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/ap_secondMS.iml" filepath="$PROJECT_DIR$/.idea/ap_secondMS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ap-secondMS.iml" filepath="$PROJECT_DIR$/.idea/ap-secondMS.iml" />
     </modules>
   </component>
 </project>
