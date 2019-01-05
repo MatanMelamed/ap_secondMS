@@ -7,12 +7,13 @@
 
 #include "Solver.h"
 #include <string>
+#include <iostream>
 using namespace std;
 
-class StringReverser : public Solver<class Problem,class Solution>{
-
+class StringReverser : public Solver<string,string>{
 public:
-    string solve(string problem);
+    StringReverser(){}
+    string solve(string problem) override;
     ~StringReverser();
 
 };
