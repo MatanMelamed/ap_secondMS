@@ -6,11 +6,17 @@
 #define AP_SECONDMS_FILECACHEMANAGER_H
 
 #include "CacheManager.h"
+#include <string>
 
-class FileCacheManager: public CacheManager<class Solution,class Problem> {
-    bool IsSolutionExists(Problem p);
-    Solution GetSolution(Problem p);
-    void SaveSolution(Solution s);
+template<class Problem, class Solution>
+class FileCacheManager : public CacheManager<Problem,Solution> {
+
+public:
+    bool IsSolutionExists(Problem problem);
+
+    Solution GetSolution(Problem problem);
+
+    void SaveSolution(Solution solution);
 };
 
 
