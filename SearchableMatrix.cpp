@@ -51,15 +51,17 @@ noexcept {
     other._matrix = nullptr;
     this->_entrance = other._entrance;
     this->_exitStateIndicator = other._exitStateIndicator;
+    this->_validMovements = other._validMovements;
     return *this;
 }
 
 SearchableMatrix &SearchableMatrix::operator=(const SearchableMatrix &other) {
     this->_entrance = other._entrance;
     this->_exitStateIndicator = other._exitStateIndicator;
+    this->_validMovements = other._validMovements;
     for (int i = 0; i < _rowLength; ++i) {
         for (int j = 0; j < _rowLength; ++j) {
-            other._matrix[i][j] = this->_matrix[i][j];
+            this->_matrix[i][j] = other._matrix[i][j];
         }
     }
     return *this;
@@ -92,20 +94,24 @@ void SearchableMatrix::SetData(std::vector<int> &data) {
 
     for (int i = 0; i < _rowLength; i++) {
         for (int j = 0; j < _rowLength; j++) {
-            _matrix[i][j] = data[i + j];
+            try {
+                _matrix[i][j] = data[i + j];
+            } catch (const std::out_of_range &exp) {
+                throw MyException(INVAL_INFO);
+            }
         }
     }
 }
 
 void SearchableMatrix::SetInitalState(Cell start) {
-    if (start.column > _rowLength || start.row > _rowLength) {
+    if (IsInMatrix(start.row, start.column)) {
         throw MyException(OUT_OF_BOUNDRY);
     }
     this->_entrance = start;
 }
 
 void SearchableMatrix::SetExitState(Cell end) {
-    if (end.column > _rowLength || end.row > _rowLength) {
+    if (IsInMatrix(end.row, end.column)) {
         throw MyException(OUT_OF_BOUNDRY);
     }
     this->_exitStateIndicator.SetState(end);
@@ -129,7 +135,6 @@ bool SearchableMatrix::IsInMatrix(int x, int y) const {
 std::vector<State<Cell> > SearchableMatrix::GetReachable(State<Cell>
                                                          &state) {
     std::vector<State<Cell> > result;
-
     for (Cell movement : _validMovements) {
         int newX = state.get_state().row + movement.row;
         int newY = state.get_state().column + movement.column;

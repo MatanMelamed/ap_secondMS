@@ -8,6 +8,7 @@
 #define MINIMUM_SIZE 2
 #define WALL_VAL -1
 #define SIZE_ERR "Cannot create a matrix in the given size!"
+#define INVAL_INFO "Invalid given values!"
 #define OUT_OF_BOUNDRY "The given location is out of boundry!"
 
 
