@@ -1,7 +1,7 @@
 #ifndef AP_SECONDMS_SEARCHABLEMATRIX_H
 #define AP_SECONDMS_SEARCHABLEMATRIX_H
 
-#include "../../Desktop/New folder/MyException.h"
+#include "MyException.h"
 #include "Searchable.h"
 #include <list>
 
@@ -11,9 +11,14 @@
 #define OUT_OF_BOUNDRY "The given location is out of boundry!"
 
 
-struct Cell {
+class Cell {
+public:
     int row;
     int column;
+
+    bool operator==(const Cell &c) {
+        return (this->row == c.row) && (this->column == c.column);
+    }
 };
 
 /***
@@ -27,8 +32,7 @@ class SearchableMatrix : public Searchable<Cell> {
     int _rowLength;
     Cell _entrance;
     State<Cell> _exitStateIndicator;
-
-    static std::list<Cell> ValidMovements;
+    std::list<Cell> _validMovements;
 
     SearchableMatrix() = default;   // Cannot be used externally
 
@@ -62,13 +66,15 @@ public:
 
     void SetExitState(Cell end);
 
+    bool IsInMatrix(int x, int y) const;
+
 
     // Searchable Override Functions
-    State<Cell> *GetInitialState() override;
+    State<Cell> GetInitialState() override;
 
     bool isGoal(State<Cell> &state) override;
 
-    std::vector<State<Cell> *> GetReachable(State<Cell> &state) override;
+    std::vector<State<Cell>> GetReachable(State<Cell> &state) override;
 
 };
 

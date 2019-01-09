@@ -26,6 +26,7 @@ SearchableMatrix::SearchableMatrix(SearchableMatrix &&other) noexcept
     other._matrix = nullptr;
     this->_entrance = other._entrance;
     this->_exitStateIndicator = other._exitStateIndicator;
+    LoadValidMovements();
 }
 
 SearchableMatrix::SearchableMatrix(const SearchableMatrix &other)
@@ -79,11 +80,11 @@ State<Cell> *SearchableMatrix::GetStateInOffSetOf(State<Cell> *base,
 }
 
 void SearchableMatrix::LoadValidMovements() {
-    if (SearchableMatrix::ValidMovements.empty()) {
-        ValidMovements.push_back({1, 1});
-        ValidMovements.push_back({-1, -1});
-        ValidMovements.push_back({1, -1});
-        ValidMovements.push_back({-1, 1});
+    if (_validMovements.empty()) {
+        _validMovements.push_back({1, 1});
+        _validMovements.push_back({-1, -1});
+        _validMovements.push_back({1, -1});
+        _validMovements.push_back({-1, 1});
     }
 }
 
@@ -112,23 +113,31 @@ void SearchableMatrix::SetExitState(Cell end) {
 
 
 // Searchable Override Functions
-State<Cell> *SearchableMatrix::GetInitialState() {
-    return new State<Cell>({_entrance});
+State<Cell> SearchableMatrix::GetInitialState() {
+    return {_entrance};
 }
 
 bool SearchableMatrix::isGoal(State<Cell> &state) {
     return state == _exitStateIndicator;
 }
 
-std::vector<State<Cell> *> SearchableMatrix::GetReachable(State<Cell>
-                                                          &state) {
-    std::vector<State<Cell> *> result;
-    State<Cell> *tmp;
+bool SearchableMatrix::IsInMatrix(int x, int y) const {
+    return (0 <= x && x <= _rowLength) &&
+           (0 <= y && y <= _rowLength);
+}
 
-    for (Cell movement : SearchableMatrix::ValidMovements) {
-        tmp = GetStateInOffSetOf(&state, movement.row, movement.column);
-        if (tmp != nullptr) {
-            result.push_back(tmp);
+std::vector<State<Cell> > SearchableMatrix::GetReachable(State<Cell>
+                                                         &state) {
+    std::vector<State<Cell> > result;
+
+    for (Cell movement : _validMovements) {
+        int newX = state.get_state().row + movement.row;
+        int newY = state.get_state().column + movement.column;
+        if (IsInMatrix(newX, newY)) {
+            if (_matrix[newX][newY] != WALL_VAL) {
+                result.push_back(State<Cell>({newX, newY}, _matrix[newX][newY],
+                                             &state));
+            }
         }
     }
 
