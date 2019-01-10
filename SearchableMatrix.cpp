@@ -83,8 +83,8 @@ State<Cell> *SearchableMatrix::GetStateInOffSetOf(State<Cell> *base,
 
 void SearchableMatrix::LoadValidMovements() {
     if (_validMovements.empty()) {
-        _validMovements.push_back({1,0});
-        _validMovements.push_back({-1,0});
+        _validMovements.push_back({1, 0});
+        _validMovements.push_back({-1, 0});
         _validMovements.push_back({0, -1});
         _validMovements.push_back({0, 1});
     }
@@ -114,17 +114,17 @@ void SearchableMatrix::SetExitState(Cell end) {
     if (IsInMatrix(end.row, end.column)) {
         throw MyException(OUT_OF_BOUNDRY);
     }
-    this->_exitStateIndicator.SetState(end);
+    this->_exitStateIndicator.SetData(end);
 }
 
 
 // Searchable Override Functions
-State<Cell> SearchableMatrix::GetInitialState() {
-    return {_entrance};
+State<Cell> *SearchableMatrix::GetInitialState() {
+    return new State<Cell>({_entrance});
 }
 
-bool SearchableMatrix::isGoal(State<Cell> &state) {
-    return state == _exitStateIndicator;
+bool SearchableMatrix::isGoal(State<Cell> *state) {
+    return (*state) == _exitStateIndicator;
 }
 
 bool SearchableMatrix::IsInMatrix(int x, int y) const {
@@ -132,16 +132,17 @@ bool SearchableMatrix::IsInMatrix(int x, int y) const {
            (0 <= y && y <= _rowLength);
 }
 
-std::vector<State<Cell> > SearchableMatrix::GetReachable(State<Cell>
-                                                         &state) {
-    std::vector<State<Cell> > result;
+std::vector<State<Cell> *> SearchableMatrix::GetReachable(State<Cell>
+                                                          *state) {
+    std::vector<State<Cell> *> result;
     for (Cell movement : _validMovements) {
-        int newX = state.GetState().row + movement.row;
-        int newY = state.GetState().column + movement.column;
+        int newX = state->GetData().row + movement.row;
+        int newY = state->GetData().column + movement.column;
         if (IsInMatrix(newX, newY)) {
             if (_matrix[newX][newY] != WALL_VAL) {
-                result.push_back(State<Cell>({newX, newY}, _matrix[newX][newY],
-                                             &state));
+                result.push_back(new State<Cell>({newX, newY},
+                                                 _matrix[newX][newY],
+                                                 state));
             }
         }
     }

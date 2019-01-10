@@ -52,27 +52,21 @@ void G() {
 
 int main() {
 
-    std::unordered_set<State<Cell>> set;
-    State<Cell> state1({1, 1}, 1);
-    State<Cell> state2({2, 2}, 2);
-    State<Cell> state3({3, 3}, 3);
-    State<Cell> state4({4, 4}, 4);
-    State<Cell> state5({5, 5}, 5);
+    std::unordered_set<State<Cell> *> set;
 
-    set.insert(state1);
-    set.insert(state2);
-    set.insert(state3);
-    set.insert(state4);
-    set.insert(state5);
-
-    std::unordered_set<State<Cell>>::iterator it;
-    it = set.find(state2);
+    for (int i = 0; i < 1; ++i) {
+        State<Cell> state2({1, 1}, 1);
+        std::cout << &state2 << std::endl;
+        set.insert(&state2);
+    }
+    std::cout << set.size() << std::endl;
+    State<Cell> state2({1, 1}, 1);
+    std::unordered_set<State<Cell> *>::iterator it;
+    it = set.find(&state2);
     if (it != set.end()) {
-        std::cout << (*it) << std::endl;
+        std::cout << &(*it) << std::endl << (*it);
+
     };
-
-    std::cout << set.size();
-
 
     return 0;
 }

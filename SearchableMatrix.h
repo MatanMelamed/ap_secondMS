@@ -1,9 +1,11 @@
 #ifndef AP_SECONDMS_SEARCHABLEMATRIX_H
 #define AP_SECONDMS_SEARCHABLEMATRIX_H
 
+#include <list>
+
 #include "MyException.h"
 #include "Searchable.h"
-#include <list>
+#include "Cell.h"
 
 #define MINIMUM_SIZE 2
 #define WALL_VAL -1
@@ -61,11 +63,11 @@ public:
 
 
     // Searchable Override Functions
-    State<Cell> GetInitialState() override;
+    State<Cell> *GetInitialState() override;
 
-    bool isGoal(State<Cell> &state) override;
+    bool isGoal(State<Cell> *state) override;
 
-    std::vector<State<Cell>> GetReachable(State<Cell> &state) override;
+    std::vector<State<Cell> *> GetReachable(State<Cell> *state) override;
 
 };
 

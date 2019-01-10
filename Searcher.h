@@ -2,7 +2,6 @@
 #define AP_SECONDMS_SEARCHER_H
 
 #include "Searchable.h"
-#include <list>
 
 template<typename T>
 class Searcher {

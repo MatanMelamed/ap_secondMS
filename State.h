@@ -1,7 +1,7 @@
 #ifndef AP_SECONDMS_STATE_H
 #define AP_SECONDMS_STATE_H
 
-#include <ostream>
+#include <iostream>
 
 template<class T> // must have operator == !!!
 class State {
