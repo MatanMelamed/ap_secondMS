@@ -12,16 +12,6 @@
 #define OUT_OF_BOUNDRY "The given location is out of boundry!"
 
 
-class Cell {
-public:
-    int row;
-    int column;
-
-    bool operator==(const Cell &c) {
-        return (this->row == c.row) && (this->column == c.column);
-    }
-};
-
 /***
  * Represents a searchable matrix.
  * must be instantiated with valid size number.

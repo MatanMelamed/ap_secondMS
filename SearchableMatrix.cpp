@@ -83,10 +83,10 @@ State<Cell> *SearchableMatrix::GetStateInOffSetOf(State<Cell> *base,
 
 void SearchableMatrix::LoadValidMovements() {
     if (_validMovements.empty()) {
-        _validMovements.push_back({1, 1});
-        _validMovements.push_back({-1, -1});
-        _validMovements.push_back({1, -1});
-        _validMovements.push_back({-1, 1});
+        _validMovements.push_back({1,0});
+        _validMovements.push_back({-1,0});
+        _validMovements.push_back({0, -1});
+        _validMovements.push_back({0, 1});
     }
 }
 
@@ -136,8 +136,8 @@ std::vector<State<Cell> > SearchableMatrix::GetReachable(State<Cell>
                                                          &state) {
     std::vector<State<Cell> > result;
     for (Cell movement : _validMovements) {
-        int newX = state.get_state().row + movement.row;
-        int newY = state.get_state().column + movement.column;
+        int newX = state.GetState().row + movement.row;
+        int newY = state.GetState().column + movement.column;
         if (IsInMatrix(newX, newY)) {
             if (_matrix[newX][newY] != WALL_VAL) {
                 result.push_back(State<Cell>({newX, newY}, _matrix[newX][newY],

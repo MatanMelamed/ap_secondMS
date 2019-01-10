@@ -22,5 +22,16 @@ public:
     }
 };
 
+namespace std {
+    template<>
+    struct hash<Cell> {
+        size_t operator()(const Cell &cell) const {
+            size_t rowHash = hash<int>()(cell.row);
+            size_t colHash = hash<int>()(cell.column);
+            return hash<size_t>()(rowHash + colHash);
+        }
+    };
+}
+
 
 #endif

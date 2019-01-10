@@ -12,7 +12,7 @@ public:
 
     virtual bool isGoal(State<T> &state) = 0;
 
-    virtual std::vector<State<T>> GetReachable(State<T> &state) = 0;
+    virtual std::vector<State<T> > GetReachable(State<T> &state) = 0;
 };
 
 #endif

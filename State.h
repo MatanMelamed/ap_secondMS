@@ -17,7 +17,7 @@ public:
                                                    _cameFrom(cameFrom) {}
 
     bool operator==(const State<T> &right) const {
-        return this->uniqueData == right.uniqueData;
+        return this->_uniqueData == right._uniqueData;
     }
 
     bool operator<(const State<T> &right) const {
@@ -54,5 +54,14 @@ public:
     }
 
 };
+
+namespace std {
+    template<class T>
+    struct hash<State<T>> {
+        size_t operator()(const State<T> &state) const {
+            return hash<T>()(state.GetData());
+        }
+    };
+}
 
 #endif

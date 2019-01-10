@@ -1,6 +1,7 @@
 #ifndef AP_SECONDMS_CUSTOMQUEUE_H
 #define AP_SECONDMS_CUSTOMQUEUE_H
 
+#include <iostream>
 #include <set>
 #include <map>
 
