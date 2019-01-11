@@ -122,10 +122,8 @@ void SearchableMatrix::SetExitState(Cell end) {
 
 // Searchable Override Functions
 State<Cell> *SearchableMatrix::GetInitialState() {
-    auto *start = new State<Cell>({_entrance},
-                                  _matrix[_entrance.row][_entrance.column]);
-    start->SetCameFrom(new State<Cell>({-1, -1})); // dummy to indicate first
-    return start;
+    return new State<Cell>({_entrance},
+                           _matrix[_entrance.row][_entrance.column]);
 }
 
 bool SearchableMatrix::isGoal(State<Cell> *state) {

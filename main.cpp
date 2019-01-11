@@ -3,12 +3,9 @@
 
 #include "SearchableMatrix.h"
 #include "BFS.h"
-#include "PStateUnorderedSet.h"
-#include "PStatePriQue.h"
-
 void f() {
     std::vector<int> v = {1, -1, 2,
-                          1, 2, 2,
+                          1, -1, 2,
                           1, 1, 1};
     SearchableMatrix m = SearchableMatrix(3);
     m.SetData(v);
@@ -19,7 +16,9 @@ void f() {
     m.SetExitState(c);
 
     BFS<Cell> bfs;
-    bfs.Search(&m);
+    std::vector<State<Cell>*> r = bfs.Search(&m);
+    std::cout <<"";
+
 }
 
 

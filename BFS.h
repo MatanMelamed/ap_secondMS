@@ -1,94 +1,89 @@
 #ifndef AP_SECONDMS_BFS_H
 #define AP_SECONDMS_BFS_H
 
-#include "Searcher.h"
-#include "PStatePriQue.h"
-#include "PStateUnorderedSet.h"
-
 #include <unordered_set>
+#include <queue>
 
-template<class T>
+#include "Searcher.h"
+
+template<typename T>
 class BFS : public Searcher<T> {
+
+    std::unordered_set<State<T> *, PStateHash<T>, PStateComp<T>> _grays;
+    std::unordered_set<State<T> *, PStateHash<T>, PStateComp<T>> _blacks;
+
+    bool IsWhite(State<T> *state);
+
+    std::vector<State<T> *> GetResults(State<T> *goal, Searchable<T> *s);
 
 public:
     std::vector<State<T> *> Search(Searchable<T> *s) override;
-
-    int SetAnswerAndReset(std::vector<State<T> *> &result,
-                          PStatePriQue<T> &open,
-                          PStateUnorderedSet<T> &close,
-                          State<T> *goal);
 };
 
-template<class T>
-int BFS<T>::SetAnswerAndReset(std::vector<State<T> *> &result,
-                              PStatePriQue<T> &open,
-                              PStateUnorderedSet<T> &close,
-                              State<T> *goal) {
-    int counter = 0;
-    State<T> *iterator = goal;
-    while (iterator->GetCameFrom() != nullptr) { // last element is dummy
-        result.push_back(iterator);
-        if (open.isExist(iterator)) { open.Remove(iterator); }
-        if (close.isExist(iterator)) { close.Remove(iterator); }
-        iterator = iterator->GetCameFrom();
-        ++counter;
-    }
-    counter += open.size() + close.size();
 
-    // delete left memory
-    delete iterator; // points to dummy - before the start state.
-    open.clear();
-    close.clear();
-
-    return counter;
-}
-
-template<class T>
+template<typename T>
 std::vector<State<T> *> BFS<T>::Search(Searchable<T> *s) {
-    std::vector<State<T> *> result;
-    PStatePriQue<T> open;
-    PStateUnorderedSet<T> close;
+    std::queue<State<T> *> queue;
+    State<T> *startState = s->GetInitialState();
+    _grays.insert(startState);
+    queue.push(startState);
 
-    open.Push(s->GetInitialState());
+    State<T> *goal = nullptr;
+    while (!queue.empty()) {
+        State<T> *current = queue.front();
+        queue.pop();
 
-    while (!open.empty()) {
-        State<T> *current = open.PopMin();
-        close.Insert(current);
-        if (s->isGoal(current)) {
-            int devNodes = SetAnswerAndReset(result, open, close, current);
-            State<T> *devNodesIndicator = s->GetDummyy();
-            devNodesIndicator->SetCost(devNodes);
-            result.push_back(devNodesIndicator);
-            break;
-        }
+        if (goal == nullptr && s->isGoal(current)) { goal = current; }
+
         std::vector<State<T> *> neighbors = s->GetReachable(current);
         for (State<T> *neighbor : neighbors) {
-            if (!close.isExist(neighbor) && !open.isExist(neighbor)) {
-                neighbor->SetCameFrom(current);
-                open.Push(neighbor);
-                neighbor = nullptr;
-            } else if (open.isExist(neighbor)) {
-                State<T> *oldNeighbor = open.GetState(neighbor->GetData());
-                if (oldNeighbor->GetCost() > neighbor->GetCost()) {
-                    open.Update(neighbor);
-                    neighbor = nullptr;
-                }
-            } else { // State must be in close.
-                State<T> *oldNeighbor = close.GetState(neighbor);
-                if (oldNeighbor->GetCost() > neighbor->GetCost()) {
-                    close.Remove(neighbor);  // removes old neighbor - same data
-                    open.Push(neighbor);
-                    neighbor = nullptr;
-                }
-            }
-            if (neighbor != nullptr) {
-                delete neighbor;
+            if (IsWhite(neighbor)) {
+                _grays.insert(neighbor);
+                queue.push(neighbor);
             }
         }
+
+        _grays.erase(current);
+        _blacks.insert(current);
     }
 
-    return result;
+    return GetResults(goal, s);
 }
 
+template<typename T>
+bool BFS<T>::IsWhite(State<T> *state) {
+    bool isGray = _grays.find(state) != _grays.end();
+    bool isBlack = _blacks.find(state) != _blacks.end();
+    return !(isBlack || isGray);
+}
+
+template<typename T>
+std::vector<State<T> *> BFS<T>::GetResults(State<T> *goal, Searchable<T> *s) {
+
+    int developedNodes = 0;
+    std::vector<State<T> *> results;
+
+    State<T> *iterator = goal;
+    while (iterator != nullptr) {
+        results.push_back(iterator);
+        _blacks.erase(iterator);
+        iterator = iterator->GetCameFrom();
+        ++developedNodes;
+    }
+
+    if (!_blacks.empty()) {
+        for (State<T> *state : _blacks) {
+            delete state;
+            ++developedNodes;
+        }
+        _blacks.clear();
+    }
+
+    State<T> *devIndicatorState = s->GetDummyy();
+    devIndicatorState->SetCost(developedNodes);
+    results.push_back(devIndicatorState);
+
+    return results;
+}
 
 #endif
