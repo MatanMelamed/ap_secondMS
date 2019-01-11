@@ -3,6 +3,8 @@
 
 #include "SearchableMatrix.h"
 #include "BFS.h"
+#include "DFS.h"
+
 void f() {
     std::vector<int> v = {1, -1, 2,
                           1, -1, 2,
@@ -15,9 +17,9 @@ void f() {
     c.column = 2;
     m.SetExitState(c);
 
-    BFS<Cell> bfs;
-    std::vector<State<Cell>*> r = bfs.Search(&m);
-    std::cout <<"";
+    DFS<Cell> bfs;
+    std::vector<State<Cell> *> r = bfs.Search(&m);
+    std::cout << "";
 
 }
 
