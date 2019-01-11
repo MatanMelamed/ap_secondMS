@@ -33,7 +33,7 @@ public:
     }
 
     void SetData(T data) {
-        this->uniqueData = data;
+        this->_uniqueData = data;
     }
 
     T GetData() const {

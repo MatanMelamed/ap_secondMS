@@ -38,6 +38,8 @@ public:
     int size() const;
 
     void print() const;
+
+    void clear();
 };
 
 template<class T>
@@ -91,6 +93,15 @@ void StatePriQue<T>::print() const {
         std::cout << *t << std::endl;
     }
     std::cout << std::endl;
+}
+
+template<class T>
+void StatePriQue<T>::clear() {
+    for (State<T> *state : _sorted_elements) {
+        _elements.erase(state->GetData());
+        _sorted_elements.erase(state);
+        delete state;
+    }
 }
 
 

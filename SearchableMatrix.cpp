@@ -92,26 +92,28 @@ void SearchableMatrix::LoadValidMovements() {
 
 void SearchableMatrix::SetData(std::vector<int> &data) {
 
+    int index = 0;
     for (int i = 0; i < _rowLength; i++) {
         for (int j = 0; j < _rowLength; j++) {
             try {
-                _matrix[i][j] = data[i + j];
+                _matrix[i][j] = data[index];
             } catch (const std::out_of_range &exp) {
                 throw MyException(INVAL_INFO);
             }
+            ++index;
         }
     }
 }
 
 void SearchableMatrix::SetInitalState(Cell start) {
-    if (IsInMatrix(start.row, start.column)) {
+    if (!IsInMatrix(start.row, start.column)) {
         throw MyException(OUT_OF_BOUNDRY);
     }
     this->_entrance = start;
 }
 
 void SearchableMatrix::SetExitState(Cell end) {
-    if (IsInMatrix(end.row, end.column)) {
+    if (!IsInMatrix(end.row, end.column)) {
         throw MyException(OUT_OF_BOUNDRY);
     }
     this->_exitStateIndicator.SetData(end);
@@ -120,7 +122,9 @@ void SearchableMatrix::SetExitState(Cell end) {
 
 // Searchable Override Functions
 State<Cell> *SearchableMatrix::GetInitialState() {
-    return new State<Cell>({_entrance});
+    auto *start = new State<Cell>({_entrance});
+    start->SetCameFrom(new State<Cell>({-1, -1})); // dummy to indicate first
+    return start;
 }
 
 bool SearchableMatrix::isGoal(State<Cell> *state) {
@@ -128,8 +132,17 @@ bool SearchableMatrix::isGoal(State<Cell> *state) {
 }
 
 bool SearchableMatrix::IsInMatrix(int x, int y) const {
-    return (0 <= x && x <= _rowLength) &&
-           (0 <= y && y <= _rowLength);
+    return (0 <= x && x < _rowLength) &&
+           (0 <= y && y < _rowLength);
+}
+
+void print(SearchableMatrix *m) {
+    for (int i = 0; i < m->_rowLength; ++i) {
+        for (int j = 0; j < m->_rowLength; ++j) {
+            std::cout << m->_matrix[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
 }
 
 std::vector<State<Cell> *> SearchableMatrix::GetReachable(State<Cell>
@@ -139,9 +152,11 @@ std::vector<State<Cell> *> SearchableMatrix::GetReachable(State<Cell>
         int newX = state->GetData().row + movement.row;
         int newY = state->GetData().column + movement.column;
         if (IsInMatrix(newX, newY)) {
-            if (_matrix[newX][newY] != WALL_VAL) {
+            int val = _matrix[newX][newY];
+            if (val != WALL_VAL) {
                 result.push_back(new State<Cell>({newX, newY},
-                                                 _matrix[newX][newY],
+                                                 _matrix[newX][newY] +
+                                                 state->GetCost(),
                                                  state));
             }
         }
@@ -149,3 +164,7 @@ std::vector<State<Cell> *> SearchableMatrix::GetReachable(State<Cell>
 
     return result;
 }
+
+
+
+

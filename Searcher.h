@@ -7,7 +7,7 @@ template<typename T>
 class Searcher {
 
 public:
-    virtual std::vector<State<T>> Search(Searchable<T> *s) = 0;
+    virtual std::vector<State<T> *> Search(Searchable<T> *s) = 0;
 };
 
 #endif

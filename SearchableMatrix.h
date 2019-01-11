@@ -37,6 +37,8 @@ class SearchableMatrix : public Searchable<Cell> {
 
     void LoadValidMovements();
 
+    friend void print(SearchableMatrix *m);
+
 public:
     // Ctors and Dtor
     explicit SearchableMatrix(int _rowLength);
