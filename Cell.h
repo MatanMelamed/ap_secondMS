@@ -13,7 +13,9 @@ public:
     }
 
     bool operator<(const Cell &c) const {
-        return row < c.row && column < c.column;
+        bool result = std::pair<int,int>(row,column) <
+                std::pair<int,int>(c.row,c.column);
+        return result;
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Cell &cell) {
@@ -28,7 +30,7 @@ namespace std {
         size_t operator()(const Cell &cell) const {
             size_t rowHash = hash<int>()(cell.row);
             size_t colHash = hash<int>()(cell.column);
-            return hash<size_t>()(rowHash + colHash);
+            return rowHash ^ colHash;
         }
     };
 }

@@ -55,8 +55,22 @@ public:
 
 };
 
-namespace std {
-    template<class T>
+template<typename T>    // compare for pointers to State<T>
+struct PStateComp{
+    bool operator()(State<T> *const &l, State<T> *const &r) const{
+        return l->GetData() == r->GetData();
+    }
+};
+
+template<typename T>
+struct PStateHash{      // hash for pointer to State<T>
+    size_t operator()(State<T> *const &state) const {
+        return std::hash<T>()(state->GetData());
+    }
+};
+
+namespace std {     // adding State<T> hash to std
+    template<typename T>
     struct hash<State<T>> {
         size_t operator()(const State<T> &state) const {
             return hash<T>()(state.GetData());

@@ -122,7 +122,8 @@ void SearchableMatrix::SetExitState(Cell end) {
 
 // Searchable Override Functions
 State<Cell> *SearchableMatrix::GetInitialState() {
-    auto *start = new State<Cell>({_entrance});
+    auto *start = new State<Cell>({_entrance},
+                                  _matrix[_entrance.row][_entrance.column]);
     start->SetCameFrom(new State<Cell>({-1, -1})); // dummy to indicate first
     return start;
 }
@@ -163,6 +164,10 @@ std::vector<State<Cell> *> SearchableMatrix::GetReachable(State<Cell>
     }
 
     return result;
+}
+
+State<Cell> *SearchableMatrix::GetDummyy() {
+    return new State<Cell>({-1, -1});
 }
 
 

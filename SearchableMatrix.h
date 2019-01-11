@@ -71,6 +71,8 @@ public:
 
     std::vector<State<Cell> *> GetReachable(State<Cell> *state) override;
 
+    State<Cell> *GetDummyy() override;
+
 };
 
 #endif
