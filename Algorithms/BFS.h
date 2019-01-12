@@ -33,7 +33,10 @@ std::vector<State<T> *> BFS<T>::Search(Searchable<T> *s) {
         State<T> *current = queue.front();
         queue.pop();
 
-        if (goal == nullptr && s->isGoal(current)) { goal = current; }
+        if (s->isGoal(current)) {
+            goal = current;
+            break;
+        }
 
         std::vector<State<T> *> neighbors = s->GetReachable(current);
         for (State<T> *neighbor : neighbors) {
@@ -58,6 +61,16 @@ bool BFS<T>::IsWhite(State<T> *state) {
 }
 
 template<typename T>
+inline void ClearSet(std::unordered_set<State<T> *> &set) {
+    if (!set.empty()) {
+        for (State<T> *state : set) {
+            delete state;
+        }
+        set.clear();
+    }
+}
+
+template<typename T>
 std::vector<State<T> *> BFS<T>::GetResults(State<T> *goal, Searchable<T> *s) {
 
     int developedNodes = 0;
@@ -66,18 +79,18 @@ std::vector<State<T> *> BFS<T>::GetResults(State<T> *goal, Searchable<T> *s) {
     State<T> *iterator = goal;
     while (iterator != nullptr) {
         results.push_back(iterator);
-        _blacks.erase(iterator);
+        if (iterator == goal) {
+            _grays.erase(iterator);
+        } else {
+            _blacks.erase(iterator);
+        }
         iterator = iterator->GetCameFrom();
         ++developedNodes;
     }
 
-    if (!_blacks.empty()) {
-        for (State<T> *state : _blacks) {
-            delete state;
-            ++developedNodes;
-        }
-        _blacks.clear();
-    }
+    developedNodes += _blacks.size() + _grays.size();
+    ClearSet(_blacks);
+    ClearSet(_grays);
 
     State<T> *devIndicatorState = s->GetDummy();
     devIndicatorState->SetCost(developedNodes);

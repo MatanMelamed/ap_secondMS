@@ -6,19 +6,18 @@
 #include "SearchableMatrix.h"
 #include "SearchableHeuristic.h"
 
-class SearchableHeuristicMatrix : public SearchableHeuristic<Cell>,
-                                  public SearchableMatrix {
-    std::unordered_map<Cell, int> heuristics;
-
+class SearchableHeuristicMatrix : public SearchableMatrix,
+                                  public SearchableHeuristic<Cell> {
+    std::unordered_map<Cell, double> heuristics;
 
 public:
     explicit SearchableHeuristicMatrix(int rows, int cols) :
             SearchableMatrix(rows, cols) {};
 
-    std::vector<std::pair<int, State<Cell> *>>
+    std::vector<std::pair<double, State<Cell> *>>
     GetReachableNHeuristic(State<Cell> *state) override;
 
-    int GetHeuristic(State<Cell> *state) override;
+    double GetHeuristic(State<Cell> *state) override;
 };
 
 #endif
