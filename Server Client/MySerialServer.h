@@ -42,8 +42,6 @@ protected:
 
     static void *Start(void *args);
 
-    static int Guard(int resultNo, const std::string &message);
-
     bool IsConnectedToClient() const {
         return _clientSocket != -1;
     }

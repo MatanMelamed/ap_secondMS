@@ -4,6 +4,10 @@
 #include <iostream>
 #include <string>
 
+#define DEF_ERROR -1
+
+int Guard(int check, const std::string &message, int error = DEF_ERROR);
+
 class MyException {
 
     std::string _message;

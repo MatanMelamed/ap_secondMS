@@ -67,10 +67,4 @@ void MySerialServer::CommunicateWithClient(server_side::ClientHandler *c) {
     _clientSocket = ERROR_NO;
 }
 
-int MySerialServer::Guard(int resultNo, const std::string &message) {
-    if (resultNo == ERROR_NO) {
-        throw MyException(message);
-    }
-    return resultNo;
-}
 

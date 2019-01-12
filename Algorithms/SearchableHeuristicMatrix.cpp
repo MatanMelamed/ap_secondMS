@@ -1,6 +1,5 @@
 #include "SearchableHeuristicMatrix.h"
 
-
 int SearchableHeuristicMatrix::GetHeuristic(State<Cell> *state) {
 
     int result;
