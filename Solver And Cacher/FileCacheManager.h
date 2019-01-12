@@ -7,17 +7,33 @@
 
 #include "CacheManager.h"
 #include <string>
+#include <map>
+#include <fstream>
+#include <vector>
 
-template<class Problem, class Solution>
-class FileCacheManager : public CacheManager<Problem,Solution> {
+using namespace std;
+class FileCacheManager : public CacheManager<string,string> {
+private:
+    ofstream* writeToCache;
+    fstream* readFromCache;
+    map<string,string> loadedProblems;
+    map<string,string> newProblems;
+
 
 public:
-    bool IsSolutionExists(Problem problem);
+    //CTOR
+    FileCacheManager(){
+        this->readFromCache = new fstream();
+        this->readFromCache->open("cache.txt");
+    }
+    bool IsSolutionExists(string problem) override;
 
-    Solution GetSolution(Problem problem);
+    string GetSolution(string problem) override;
 
-    void SaveSolution(Solution solution);
+    void SaveSolution(string problem,string solution) override;
+    ~FileCacheManager();
+    vector<string> ProblemAndSolutionFromCache(string line);
 };
 
 
-#endif //AP_SECONDMS_FILECACHEMANAGER_H
+#endif

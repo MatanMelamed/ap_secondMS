@@ -77,6 +77,8 @@ public:
 
     State<Cell> *GetDummy() override;
 
+    std:: string toString();
+
 };
 
 #endif

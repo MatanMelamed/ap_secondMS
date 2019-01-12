@@ -52,6 +52,9 @@ public:
         os << "_uniqueData: " << state._uniqueData << " _cost: " << state._cost;
         return os;
     }
+    std:: string toString(){
+        return _uniqueData.toString();
+    }
 
 };
 
