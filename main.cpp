@@ -1,24 +1,22 @@
 
 #include <iostream>
-
-#include "SearchableMatrix.h"
-#include "BFS.h"
-#include "DFS.h"
+#include "SearchableHeuristicMatrix.h"
+#include "Astar.h"
 
 void f() {
     std::vector<int> v = {1, -1, 2,
                           1, -1, 2,
                           1, 1, 1};
-    SearchableMatrix m = SearchableMatrix(3);
+    SearchableHeuristicMatrix m = SearchableHeuristicMatrix(3, 3);
     m.SetData(v);
     Cell c{0, 0};
-    m.SetInitalState(c);
+    m.SetInitialState(c);
     c.row = 2;
     c.column = 2;
     m.SetExitState(c);
 
-    DFS<Cell> bfs;
-    std::vector<State<Cell> *> r = bfs.Search(&m);
+    Astar<Cell> astar;
+    std::vector<State<Cell> *> r = astar.Search(&m);
     std::cout << "";
 
 }

@@ -19,10 +19,12 @@
  * must be instantiated with valid size number.
  * before use be sure to set entrance and exit with Locations!
  */
-class SearchableMatrix : public Searchable<Cell> {
+class SearchableMatrix : virtual public Searchable<Cell> {
 
+protected:
     int **_matrix;
     int _rowLength;
+    int _colLength;
     Cell _entrance;
     State<Cell> _exitStateIndicator;
     std::list<Cell> _validMovements;
@@ -37,11 +39,13 @@ class SearchableMatrix : public Searchable<Cell> {
 
     void LoadValidMovements();
 
+    void UpdateAllocation(int rows, int columns);
+
     friend void print(SearchableMatrix *m);
 
 public:
     // Ctors and Dtor
-    explicit SearchableMatrix(int _rowLength);
+    explicit SearchableMatrix(int rows, int columns);
 
     SearchableMatrix(const SearchableMatrix &other); // copy constructor
 
@@ -57,7 +61,7 @@ public:
     // Class Specific Functions
     void SetData(std::vector<int> &data);
 
-    void SetInitalState(Cell start);
+    void SetInitialState(Cell start);
 
     void SetExitState(Cell end);
 
@@ -71,7 +75,7 @@ public:
 
     std::vector<State<Cell> *> GetReachable(State<Cell> *state) override;
 
-    State<Cell> *GetDummyy() override;
+    State<Cell> *GetDummy() override;
 
 };
 

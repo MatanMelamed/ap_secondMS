@@ -14,7 +14,7 @@ public:
 
     virtual std::vector<State<T> *> GetReachable(State<T> *state) = 0;
 
-    virtual State<T> *GetDummyy() = 0;
+    virtual State<T> *GetDummy() = 0;
 };
 
 #endif

@@ -56,14 +56,21 @@ public:
 };
 
 template<typename T>    // compare for pointers to State<T>
-struct PStateComp{
-    bool operator()(State<T> *const &l, State<T> *const &r) const{
+struct PStateLess {
+    bool operator()(State<T> *const &l, State<T> *const &r) const {
+        return l->GetCost() < r->GetCost();
+    }
+};
+
+template<typename T>    // compare for pointers to State<T>
+struct PStateComp {
+    bool operator()(State<T> *const &l, State<T> *const &r) const {
         return l->GetData() == r->GetData();
     }
 };
 
 template<typename T>
-struct PStateHash{      // hash for pointer to State<T>
+struct PStateHash {      // hash for pointer to State<T>
     size_t operator()(State<T> *const &state) const {
         return std::hash<T>()(state->GetData());
     }

@@ -79,7 +79,7 @@ std::vector<State<T> *> BFS<T>::GetResults(State<T> *goal, Searchable<T> *s) {
         _blacks.clear();
     }
 
-    State<T> *devIndicatorState = s->GetDummyy();
+    State<T> *devIndicatorState = s->GetDummy();
     devIndicatorState->SetCost(developedNodes);
     results.push_back(devIndicatorState);
 

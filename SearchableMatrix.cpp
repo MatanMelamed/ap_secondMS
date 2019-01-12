@@ -7,21 +7,51 @@ void SearchableMatrix::AllocateMatrix() {
     _matrix = new int *[_rowLength];
 
     for (int i = 0; i < _rowLength; i++) {
-        _matrix[i] = new int[_rowLength];
+        _matrix[i] = new int[_colLength];
     }
 }
 
-SearchableMatrix::SearchableMatrix(int _rowLength) : _rowLength(_rowLength),
-                                                     _matrix(nullptr),
-                                                     _exitStateIndicator({}) {
+void SearchableMatrix::UpdateAllocation(int rows, int columns) {
+    if (_colLength != columns) {
+        for (int i = 0; i < _rowLength; ++i) { delete _matrix[i]; }
+        _colLength = columns;
+        if (_rowLength != rows) {
+            delete _matrix;
+            _rowLength = rows;
+            AllocateMatrix();
+        } else {
+            for (int i = 0; i < _rowLength; ++i) {
+                _matrix[i] = new int[_colLength];
+            }
+        }
+    } else if (_rowLength != rows) {
+        int **tmp = _matrix;
+        int min = _rowLength > rows ? rows : _rowLength;
+        _matrix = new int *[rows];
+        for (int i = 0; i < min; i++) { _matrix[i] = tmp[i]; }
+        for (int j = min; j < _rowLength; ++j) { delete tmp[j]; }
+        delete tmp;
+        _rowLength = rows;
+    }
+}
+
+SearchableMatrix::SearchableMatrix(int rows, int columns) :
+        _rowLength(rows),
+        _colLength(columns),
+        _matrix(nullptr),
+        _exitStateIndicator(
+                {}) {
     LoadValidMovements();
-    if (_rowLength < MINIMUM_SIZE) { throw MyException(SIZE_ERR); }
+    if (rows < MINIMUM_SIZE || columns < MINIMUM_SIZE) {
+        throw MyException(SIZE_ERR);
+    }
     AllocateMatrix();
 }
 
 SearchableMatrix::SearchableMatrix(SearchableMatrix &&other) noexcept
         : _exitStateIndicator({}) {
     this->_rowLength = other._rowLength;
+    this->_colLength = other._colLength;
     this->_matrix = other._matrix;
     other._matrix = nullptr;
     this->_entrance = other._entrance;
@@ -30,7 +60,7 @@ SearchableMatrix::SearchableMatrix(SearchableMatrix &&other) noexcept
 }
 
 SearchableMatrix::SearchableMatrix(const SearchableMatrix &other)
-        : SearchableMatrix(other._rowLength) {
+        : SearchableMatrix(other._rowLength, other._colLength) {
     (*this) = other; // copy assignment
 }
 
@@ -47,6 +77,7 @@ SearchableMatrix::~SearchableMatrix() {
 SearchableMatrix &SearchableMatrix::operator=(SearchableMatrix &&other)
 noexcept {
     this->_rowLength = other._rowLength;
+    this->_colLength = other._colLength;
     this->_matrix = other._matrix;
     other._matrix = nullptr;
     this->_entrance = other._entrance;
@@ -59,21 +90,21 @@ SearchableMatrix &SearchableMatrix::operator=(const SearchableMatrix &other) {
     this->_entrance = other._entrance;
     this->_exitStateIndicator = other._exitStateIndicator;
     this->_validMovements = other._validMovements;
+    UpdateAllocation(other._rowLength, other._colLength);
     for (int i = 0; i < _rowLength; ++i) {
-        for (int j = 0; j < _rowLength; ++j) {
+        for (int j = 0; j < _colLength; ++j) {
             this->_matrix[i][j] = other._matrix[i][j];
         }
     }
     return *this;
 }
 
-
 // Class Specific Functions
 State<Cell> *SearchableMatrix::GetStateInOffSetOf(State<Cell> *base,
                                                   int xDir,
                                                   int yDir) {
     State<Cell> *result = nullptr;
-    if (xDir < _rowLength && yDir < _rowLength) {
+    if (xDir < _rowLength && yDir < _colLength) {
         if (_matrix[xDir][yDir] != WALL_VAL) {
             result = new State<Cell>({xDir, yDir}, _matrix[xDir][yDir], base);
         }
@@ -94,7 +125,7 @@ void SearchableMatrix::SetData(std::vector<int> &data) {
 
     int index = 0;
     for (int i = 0; i < _rowLength; i++) {
-        for (int j = 0; j < _rowLength; j++) {
+        for (int j = 0; j < _colLength; j++) {
             try {
                 _matrix[i][j] = data[index];
             } catch (const std::out_of_range &exp) {
@@ -105,7 +136,7 @@ void SearchableMatrix::SetData(std::vector<int> &data) {
     }
 }
 
-void SearchableMatrix::SetInitalState(Cell start) {
+void SearchableMatrix::SetInitialState(Cell start) {
     if (!IsInMatrix(start.row, start.column)) {
         throw MyException(OUT_OF_BOUNDRY);
     }
@@ -119,6 +150,19 @@ void SearchableMatrix::SetExitState(Cell end) {
     this->_exitStateIndicator.SetData(end);
 }
 
+void print(SearchableMatrix *m) {
+    for (int i = 0; i < m->_rowLength; ++i) {
+        for (int j = 0; j < m->_rowLength; ++j) {
+            std::cout << m->_matrix[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
+inline bool SearchableMatrix::IsInMatrix(int x, int y) const {
+    return (0 <= x && x < _rowLength) &&
+           (0 <= y && y < _colLength);
+}
 
 // Searchable Override Functions
 State<Cell> *SearchableMatrix::GetInitialState() {
@@ -128,20 +172,6 @@ State<Cell> *SearchableMatrix::GetInitialState() {
 
 bool SearchableMatrix::isGoal(State<Cell> *state) {
     return (*state) == _exitStateIndicator;
-}
-
-bool SearchableMatrix::IsInMatrix(int x, int y) const {
-    return (0 <= x && x < _rowLength) &&
-           (0 <= y && y < _rowLength);
-}
-
-void print(SearchableMatrix *m) {
-    for (int i = 0; i < m->_rowLength; ++i) {
-        for (int j = 0; j < m->_rowLength; ++j) {
-            std::cout << m->_matrix[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
 }
 
 std::vector<State<Cell> *> SearchableMatrix::GetReachable(State<Cell>
@@ -164,9 +194,10 @@ std::vector<State<Cell> *> SearchableMatrix::GetReachable(State<Cell>
     return result;
 }
 
-State<Cell> *SearchableMatrix::GetDummyy() {
+State<Cell> *SearchableMatrix::GetDummy() {
     return new State<Cell>({-1, -1});
 }
+
 
 
 

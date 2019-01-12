@@ -87,7 +87,7 @@ std::vector<State<T> *> BestFS<T>::Search(Searchable<T> *s) {
     }
 
     int devNodes = SetAnswerAndReset(result, open, close, goal);
-    State<T> *devNodesIndicator = s->GetDummyy();
+    State<T> *devNodesIndicator = s->GetDummy();
     devNodesIndicator->SetCost(devNodes);
     result.push_back(devNodesIndicator);
 

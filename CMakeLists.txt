@@ -6,4 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 #add_executable(ap_secondMS main.cpp )
 add_executable(ap_secondMS Searchable.h SearchableMatrix.cpp SearchableMatrix.h
         State.h main.cpp Searcher.h BestFS.h PStateUnorderedSet.h
-        BFS.h DFS.h)
+        BFS.h DFS.h
+        SearcherHeuristic.h SearchableHeuristic.h SearchableHeuristicMatrix.h
+        Astar.h SearchableHeuristicMatrix.cpp
+        PStatePriQue.h AStarPriQue.h Solver.h MatrixSolver.h)

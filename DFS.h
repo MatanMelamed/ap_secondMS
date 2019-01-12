@@ -54,7 +54,7 @@ std::vector<State<T> *> DFS<T>::GetResults(Searchable<T> *s) {
         _blacks.clear();
     }
 
-    State<T> *devIndicatorState = s->GetDummyy();
+    State<T> *devIndicatorState = s->GetDummy();
     devIndicatorState->SetCost(developedNodes);
     results.push_back(devIndicatorState);
 
