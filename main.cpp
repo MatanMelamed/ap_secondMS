@@ -9,7 +9,7 @@ void f() {
                           1, 2, 1, 1,
                           1, 1, 1, 3,
                           3, 2, 1, 1};
-    SearchableMatrix m = SearchableMatrix(4, 4);
+    SearchableHeuristicMatrix m = SearchableHeuristicMatrix(4, 4);
     m.SetData(v);
     Cell c{0, 0};
     m.SetInitialState(c);
@@ -17,7 +17,7 @@ void f() {
     c.column = 3;
     m.SetExitState(c);
 
-    DFS<Cell> astar;
+    Astar<Cell> astar;
     std::vector<State<Cell> *> r = astar.Search(&m);
     std::cout << "";
 

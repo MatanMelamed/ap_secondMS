@@ -24,23 +24,23 @@ int BestFS<T>::SetAnswerAndReset(std::vector<State<T> *> &result,
                                  PStatePriQue<T> &open,
                                  PStateUnorderedSet<T> &close,
                                  State<T> *goal) {
-    int counter = 0;
+    int developedNodes = 0;
 
     State<T> *iterator = goal;
-    while (iterator != nullptr) { // last element is dummy
+    while (iterator != nullptr) {
         result.push_back(iterator);
         if (open.isExist(iterator)) { open.Remove(iterator); }
         if (close.isExist(iterator)) { close.Remove(iterator); }
         iterator = iterator->GetCameFrom();
-        ++counter;
+        ++developedNodes;
     }
 
-    counter += open.size() + close.size();
+    developedNodes += open.size() + close.size();
     // delete left memory
     open.clear();
     close.clear();
 
-    return counter;
+    return developedNodes;
 }
 
 template<class T>
@@ -63,7 +63,6 @@ std::vector<State<T> *> BestFS<T>::Search(Searchable<T> *s) {
         std::vector<State<T> *> neighbors = s->GetReachable(current);
         for (State<T> *neighbor : neighbors) {
             if (!close.isExist(neighbor) && !open.isExist(neighbor)) {
-                neighbor->SetCameFrom(current);
                 open.Push(neighbor);
                 neighbor = nullptr;
             } else if (open.isExist(neighbor)) {

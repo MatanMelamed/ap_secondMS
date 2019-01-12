@@ -29,7 +29,7 @@ std::vector<State<T> *> Astar<T>::Search(SearchableHeuristic<T> *s) {
 
     // Get and Set initial state
     State<T> *startState = s->GetInitialState();
-    int startHeuristic = s->GetHeuristic(startState);
+    double startHeuristic = s->GetHeuristic(startState);
     open.Push(AStarState<T>({startHeuristic + startState->GetCost(),
                              startHeuristic,
                              startState}));
@@ -40,9 +40,9 @@ std::vector<State<T> *> Astar<T>::Search(SearchableHeuristic<T> *s) {
             _goal = current;
             break;
         }
-        std::vector<std::pair<int, State<T> *>> neighbors =
+        std::vector<std::pair<double, State<T> *>> neighbors =
                 s->GetReachableNHeuristic(current);
-        for (std::pair<int, State<T> *> neighbor : neighbors) {
+        for (std::pair<double, State<T> *> neighbor : neighbors) {
             if (IsNew(neighbor.second)) {
                 open.Push(AStarState<T>({neighbor.first +
                                          neighbor.second->GetCost(),

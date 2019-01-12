@@ -1,15 +1,15 @@
 #include "SearchableHeuristicMatrix.h"
 
-int SearchableHeuristicMatrix::GetHeuristic(State<Cell> *state) {
+double SearchableHeuristicMatrix::GetHeuristic(State<Cell> *state) {
 
-    int result;
+    double result;
     auto it = heuristics.find(state->GetData());
     if (it != heuristics.end()) {
         result = (*it).second;
     } else {
         Cell cell = state->GetData();
         Cell end = _exitStateIndicator.GetData();
-        result = (int) sqrt((cell.row - end.row) *
+        result = sqrt((cell.row - end.row) *
                             (cell.row - end.row) +
                             (cell.column - end.column) *
                             (cell.column - end.column));
@@ -19,10 +19,10 @@ int SearchableHeuristicMatrix::GetHeuristic(State<Cell> *state) {
     return result;
 }
 
-std::vector<std::pair<int, State<Cell> *>>
+std::vector<std::pair<double, State<Cell> *>>
 SearchableHeuristicMatrix::GetReachableNHeuristic(State<Cell> *state) {
 
-    std::vector<std::pair<int, State<Cell> *>> result;
+    std::vector<std::pair<double, State<Cell> *>> result;
 
     std::vector<State<Cell> *> neighbors = GetReachable(state);
     for (State<Cell> *neighbor : neighbors) {

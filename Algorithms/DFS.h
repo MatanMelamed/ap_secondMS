@@ -46,10 +46,11 @@ std::vector<State<T> *> DFS<T>::GetResults(Searchable<T> *s) {
         ++developedNodes;
     }
 
+    developedNodes += _blacks.size();
+
     if (!_blacks.empty()) {
         for (State<T> *state : _blacks) {
             delete state;
-            ++developedNodes;
         }
         _blacks.clear();
     }
