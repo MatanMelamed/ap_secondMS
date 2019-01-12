@@ -55,16 +55,16 @@ void MySerialServer::waitForClient() {
             } else {
                 throw MyException(ERR_SCK_ACPT);
             }
+        } else {
+            break;
         }
     }
 }
 
 
 void MySerialServer::CommunicateWithClient(server_side::ClientHandler *c) {
-    bool conversationEnded = false;
-    while (!ShouldStop() || conversationEnded) {
-        conversationEnded = c->handleClient(_clientSocket);
-    }
+    c->handleClient(_clientSocket);
+    _clientSocket = ERROR_NO;
 }
 
 int MySerialServer::Guard(int resultNo, const std::string &message) {

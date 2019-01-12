@@ -13,7 +13,7 @@
 #include <iostream>
 
 #include "Server.h"
-#include "MyException.h"
+#include "../MyException.h"
 
 #define ERROR_NO -1
 #define ERR_SCK_OPN "ERROR opening socket"

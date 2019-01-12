@@ -1,18 +1,19 @@
 
 #include <iostream>
-#include "SearchableHeuristicMatrix.h"
-#include "Astar.h"
+#include "Algorithms/SearchableHeuristicMatrix.h"
+#include "Algorithms/Astar.h"
 
 void f() {
-    std::vector<int> v = {1, -1, 2,
-                          1, -1, 2,
-                          1, 1, 1};
-    SearchableHeuristicMatrix m = SearchableHeuristicMatrix(3, 3);
+    std::vector<int> v = {1, -1, 2, 2,
+                          1, 2, 1, 1,
+                          1, 1, 1, 3,
+                          3, 2, 1, 1};
+    SearchableHeuristicMatrix m = SearchableHeuristicMatrix(4, 4);
     m.SetData(v);
     Cell c{0, 0};
     m.SetInitialState(c);
-    c.row = 2;
-    c.column = 2;
+    c.row = 3;
+    c.column = 3;
     m.SetExitState(c);
 
     Astar<Cell> astar;

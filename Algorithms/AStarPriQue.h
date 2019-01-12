@@ -34,11 +34,11 @@ public:
 
     void Push(AStarState<T> aState);
 
-    void Remove(State<T> * state);
+    void Remove(State<T> *state);
 
-    void Update(State<T> * state);
+    void Update(State<T> *state);
 
-    State<T> *GetState(State<T> * state) const;
+    State<T> *GetState(State<T> *state) const;
 
     State<T> *PopMin();
 
@@ -109,14 +109,14 @@ void AStarPriQue<T>::print() const {
 template<class T>
 void AStarPriQue<T>::clear() {
     for (AStarState<T> aState : _sorted_elements) {
-        _elements.erase(aState.state->GetData());
-        _sorted_elements.erase(aState);
         delete aState.state;
     }
+    _elements.clear();
+    _sorted_elements.clear();
 }
 
 template<class T>
-State<T> *AStarPriQue<T>::GetState(State<T> * state) const {
+State<T> *AStarPriQue<T>::GetState(State<T> *state) const {
     return (*_elements.at(state->GetData())).state;
 }
 
