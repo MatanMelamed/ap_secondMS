@@ -197,7 +197,19 @@ std::vector<State<Cell> *> SearchableMatrix::GetReachable(State<Cell>
 State<Cell> *SearchableMatrix::GetDummy() {
     return new State<Cell>({-1, -1});
 }
-
+std:: string SearchableMatrix::toString(){
+    std:: string matrixFormat = "SP"+this->GetInitialState()->toString();
+    matrixFormat = matrixFormat+ "EP"+this->_exitStateIndicator.toString();
+    matrixFormat = matrixFormat + "RL" + std::to_string(_rowLength);
+    matrixFormat = matrixFormat + "CL" + std::to_string(_colLength);
+    matrixFormat+= "Matrix";
+    for(int i=0;i<_rowLength;i++){
+        for (int j = 0; j <_rowLength ; j++) {
+            matrixFormat= matrixFormat + std::to_string(_matrix[i][j]);
+        }
+    }
+    return matrixFormat;
+}
 
 
 

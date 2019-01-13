@@ -22,6 +22,10 @@ public:
         os << "row: " << cell.row << " column: " << cell.column;
         return os;
     }
+    std:: string toString(){
+        return "row" + std::to_string(this->row) + "column"+std::to_string
+                (this->column);
+    }
 };
 
 namespace std {

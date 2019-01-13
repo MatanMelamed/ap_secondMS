@@ -9,7 +9,7 @@ public:
 
     virtual Solution GetSolution(Problem problem) = 0;
 
-    virtual void SaveSolution(Solution problem) = 0;
+    virtual void SaveSolution(Problem problem, Solution solution) = 0;
 };
 
 #endif
