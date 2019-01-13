@@ -10,6 +10,8 @@ public:
     virtual std::vector<State<T> *> Search(Searchable<T> *s) = 0;
 
     virtual Searcher *Clone() = 0;
+
+    virtual ~Searcher() = default;
 };
 
 #endif

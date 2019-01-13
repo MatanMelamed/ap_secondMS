@@ -24,6 +24,8 @@ public:
     std::vector<State<T> *> Search(Searchable<T> *s) override;
 
     Searcher<T> *Clone() override;
+
+    ~Astar() override = default;
 };
 
 

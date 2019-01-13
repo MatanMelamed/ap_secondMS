@@ -16,10 +16,11 @@ void *MySerialServer::Start(void *args) {
     auto *params = (ThreadParams *) args;
 
     params->_server->listen(SOMAXCONN);
+    server_side::TCP_client client = params->_server->Accept();
 
     while (!params->_server->ShouldStop()) {
-        server_side::TCP_client client = params->_server->Accept();
         params->_clientHandler->handleClient(client);
+        client = params->_server->Accept();
     }
 
     params->_server->CloseSock();

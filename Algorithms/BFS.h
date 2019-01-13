@@ -16,6 +16,10 @@ class BFS : public Searcher<T> {
 
     std::vector<State<T> *> GetResults(State<T> *goal, Searchable<T> *s);
 
+    void ClearSet(std::unordered_set<State<T> *,
+            PStateHash<T>,
+            PStateComp<T>> &set);
+
 public:
     std::vector<State<T> *> Search(Searchable<T> *s) override;
 
@@ -63,7 +67,9 @@ bool BFS<T>::IsWhite(State<T> *state) {
 }
 
 template<typename T>
-inline void ClearSet(std::unordered_set<State<T> *> &set) {
+inline void BFS<T>::ClearSet(std::unordered_set<State<T> *,
+        PStateHash<T>,
+        PStateComp<T>> &set) {
     if (!set.empty()) {
         for (State<T> *state : set) {
             delete state;

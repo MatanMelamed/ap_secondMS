@@ -10,7 +10,9 @@ server_side::TCP_client server_side::TCP_server::Accept() {
 
     if (client_sock_fd < 0) {
         if (errno == EAGAIN || errno == EWOULDBLOCK) {
-            throw MyException(ERR_ACCEPT_TIMEOUT);
+            close();
+            std::cout << "TCP_server::Accept() Timeout occured.\n";
+            return TCP_client();
         } else {
             throw MyException(ERR_ACCEPT);
         }

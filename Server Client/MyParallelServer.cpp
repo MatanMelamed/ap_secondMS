@@ -15,55 +15,37 @@ pthread_t MyParallelServer::open(int port, server_side::ClientHandler *c) {
 
 void *MyParallelServer::Start(void *args) {
     auto *params = (ThreadParams *) args;
+    CliThreadParams *cliParams;
 
     params->_server->listen(SOMAXCONN);
 
+    server_side::TCP_client client = params->_server->Accept();;
     while (!params->_server->ShouldStop()) {
-        server_side::TCP_client client = params->_server->Accept();
 
-        auto *cliParams = new CliThreadParams();
+        cliParams = new CliThreadParams();
         cliParams->clientSock = client;
         cliParams->handler = params->_clientHandler->Clone();
         cliParams->server = params->_server;
-
         params->_server->AddClient(cliParams);
+
+        client = params->_server->Accept();
     }
 
     params->_server->CloseAll();
-    delete params->_clientHandler;
     delete params;
 
+    std::cout << "server thread finished\n";
     return nullptr;
-}
-
-void *MyParallelServer::DoClient(void *args) {
-    auto *cliParams = (CliThreadParams *) args;
-    cliParams->handler->handleClient(cliParams->clientSock);
-    cliParams->server->UpdateThreadVector(pthread_self(), DELETE);
-    delete cliParams->handler;
-    delete cliParams;
-    return nullptr;
-}
-
-MyParallelServer::MyParallelServer() {}
-
-void MyParallelServer::close() {
-    _shouldStop = true;
 }
 
 void MyParallelServer::AddClient(CliThreadParams *cliParams) {
     pthread_t newClient;
     pthread_create(&newClient, nullptr, MyParallelServer::DoClient, cliParams);
+
     UpdateThreadVector(newClient);
     std::cout << "MyParallelServer::AddClient() new cli added\n";
     std::cout << "MyParallelServer::AddClient() vec size: "
               << to_string(_clientThreads.size()) << "\n";
-}
-
-void MyParallelServer::CloseAll() {
-    for (pthread_t thread : _clientThreads) {
-        pthread_join(thread, nullptr);
-    }
 }
 
 void MyParallelServer::UpdateThreadVector(pthread_t pthread, int operation) {
@@ -82,4 +64,23 @@ void MyParallelServer::UpdateThreadVector(pthread_t pthread, int operation) {
     lock.unlock();
 }
 
+void *MyParallelServer::DoClient(void *args) {
+    auto *cliParams = (CliThreadParams *) args;
+    cliParams->handler->handleClient(cliParams->clientSock);
 
+    MyParallelServer *server = cliParams->server;
+    delete cliParams->handler;
+    delete cliParams;
+
+    return nullptr;
+}
+
+void MyParallelServer::CloseAll() {
+    for (pthread_t thread : _clientThreads) {
+        pthread_join(thread, nullptr);
+    }
+}
+
+void MyParallelServer::close() {
+    _shouldStop = true;
+}

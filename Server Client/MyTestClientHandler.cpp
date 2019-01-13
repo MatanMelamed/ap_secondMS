@@ -81,6 +81,6 @@ std::string MyTestClientHandler::GetAnswer(std::string problem) {
 }
 
 MyTestClientHandler::~MyTestClientHandler() {
-    /*delete _solver;
-    delete _manager;*/
+    delete _solver;
+    delete _manager;
 }

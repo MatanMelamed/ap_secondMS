@@ -32,7 +32,7 @@ class MyParallelServer : public server_side::TCP_server {
     void AddClient(CliThreadParams *cliParams);
 
 public:
-    MyParallelServer();
+    MyParallelServer() = default;
 
     static void *Start(void *args);
 

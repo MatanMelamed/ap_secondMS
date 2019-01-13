@@ -6,8 +6,8 @@ MatrixSolver::MatrixSolver(Searcher<Cell> *searcher) {
 
 string MatrixSolver::solve(SearchableMatrix *problem) {
     std::vector<State<Cell> *> result = searcher->Search(problem);
-    State<Cell> father = *result[result.size() - 2];
-    State<Cell> current = *result[result.size() - 3];
+    State<Cell> father = *result[result.size() - 3];
+    State<Cell> current = *result[result.size() - 2];
     string moves;
     for (int i = (int) (result.size() - 3); i >= 0;) {
         if (father.GetData().row < current.GetData().row &&
@@ -23,10 +23,10 @@ string MatrixSolver::solve(SearchableMatrix *problem) {
                    father.GetData().row == current.GetData().row) {
             moves += LEFT;
         }
-        moves += moves + ",";
-        father = current;
+        moves += ",";
+        current = father;
         if (i > 0) {
-            current = *result[--i];
+            father = *result[--i];
         } else { break; }
     }
     moves = moves.substr(0, moves.length() - 1);
