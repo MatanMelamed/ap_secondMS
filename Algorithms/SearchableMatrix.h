@@ -2,6 +2,7 @@
 #define AP_SECONDMS_SEARCHABLEMATRIX_H
 
 #include <list>
+#include <unordered_map>
 
 #include "../Etc/MyException.h"
 #include "Searchable.h"
@@ -28,6 +29,8 @@ protected:
     Cell _entrance;
     State<Cell> _exitStateIndicator;
     std::list<Cell> _validMovements;
+    std::unordered_map<Cell, double> heuristics;
+
 
     SearchableMatrix() = default;   // Cannot be used externally
 
@@ -77,7 +80,12 @@ public:
 
     State<Cell> *GetDummy() override;
 
-    std:: string toString();
+    std::string toString();
+
+    std::vector<std::pair<double, State<Cell> *>>
+    GetReachableNHeuristic(State<Cell> *state) override;
+
+    double GetHeuristic(State<Cell> *state) override;
 
 };
 

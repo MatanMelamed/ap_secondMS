@@ -11,6 +11,7 @@
 
 #define ERR_READ "failure on reading from socket"
 #define ERR_READ_TIMEOUT "reading timeout has reached"
+#define ERR_SEND "failure on writing to socket"
 
 namespace server_side {
 
@@ -30,6 +31,8 @@ namespace server_side {
         TCP_client(TCP_socket sock) : sock(sock) {}
 
         std::string GetLine();
+
+        void Send(std::string message);
 
         void settimeout(int sec, int usec = 0);
 

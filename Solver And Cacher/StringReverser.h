@@ -6,11 +6,13 @@
 #include <iostream>
 #include <algorithm>
 
-class StringReverser : public Solver<string,string>{
+class StringReverser : public Solver<string, string> {
 public:
-    StringReverser(){}
+    StringReverser() = default;
+
     string solve(string problem) override;
-    ~StringReverser();
+
+    Solver<string, string> *Clone() override;
 
 };
 

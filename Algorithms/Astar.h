@@ -3,11 +3,12 @@
 
 #include <unordered_map>
 #include <unordered_set>
-#include "SearcherHeuristic.h"
+
+#include "Searcher.h"
 #include "AStarPriQue.h"
 
 template<typename T>
-class Astar : public SearcherHeuristic<T> {
+class Astar : public Searcher<T> {
 protected:
     AStarPriQue<T> open;
     std::unordered_set<State<T> *, PStateHash<T>, PStateComp<T>> close;
@@ -20,12 +21,14 @@ protected:
 public:
     Astar() : _goal(nullptr) {};
 
-    std::vector<State<T> *> Search(SearchableHeuristic<T> *s) override;
+    std::vector<State<T> *> Search(Searchable<T> *s) override;
+
+    Searcher<T> *Clone() override;
 };
 
 
 template<typename T>
-std::vector<State<T> *> Astar<T>::Search(SearchableHeuristic<T> *s) {
+std::vector<State<T> *> Astar<T>::Search(Searchable<T> *s) {
 
     // Get and Set initial state
     State<T> *startState = s->GetInitialState();
@@ -84,8 +87,8 @@ std::vector<State<T> *> Astar<T>::GetResults(Searchable<T> *s) {
     if (!open.empty()) {
         open.clear();
     }
-    if(!close.empty()){
-        for (State<T> * state : close) {
+    if (!close.empty()) {
+        for (State<T> *state : close) {
             delete state;
         }
         close.clear();
@@ -104,6 +107,11 @@ template<typename T>
 inline bool Astar<T>::IsNew(State<T> *state) {
     return (!open.isExist(state)) &&                        // not in open
            (close.find(state) == close.end());   // not it close
+}
+
+template<typename T>
+Searcher<T> *Astar<T>::Clone() {
+    return new Astar();
 }
 
 #endif

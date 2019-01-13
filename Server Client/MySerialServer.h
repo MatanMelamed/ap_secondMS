@@ -11,14 +11,13 @@ struct ThreadParams {
     server_side::ClientHandler *_clientHandler;
 };
 
+
 class MySerialServer : public server_side::TCP_server {
 
 public:
-    MySerialServer();
-
     static void *Start(void *args);
 
-    void open(int port, server_side::ClientHandler *c) override;
+    pthread_t open(int port, server_side::ClientHandler *c) override;
 
     void close() override;
 

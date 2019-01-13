@@ -10,4 +10,5 @@ file(GLOB solverCacher "Solver And Cacher/*.h" "Solver And Cacher/*.cpp")
 file(GLOB etc "Etc/*.h" "Etc/*.cpp")
 file(GLOB rootLayer "main.cpp")
 
-add_executable(ap_secondMS ${algorithms} ${rootLayer} ${etc} ${serverClient} "Server Client/TCP_client.cpp" "Server Client/MyParallelServer.cpp" "Server Client/MyParallelServer.h")
+add_executable(ap_secondMS ${etc} ${algorithms} ${serverClient} ${rootLayer}
+        ${solverCacher} "Server Client/tryServ.h")

@@ -10,7 +10,7 @@ namespace server_side {
     public:
 
         // create socket and
-        virtual void open(int port, ClientHandler *c) = 0;
+        virtual pthread_t open(int port, ClientHandler *c) = 0;
 
         // close the server
         virtual void close() = 0;

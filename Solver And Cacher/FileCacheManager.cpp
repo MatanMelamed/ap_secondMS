@@ -45,7 +45,7 @@ vector<string> FileCacheManager:: ProblemAndSolutionFromCache(string line){
     return problemAndSol;
 }
 FileCacheManager:: ~FileCacheManager(){
-    this->writeToCache = new ofstream("cache.txt",ios_base::app);
+    this->writeToCache = new ofstream(CACHE_FILE,ios_base::app);
     map<string, string>::iterator it = this->newProblems.begin();
     while (it != this->newProblems.end()) {
         *this->writeToCache << it->first + "$" + it->second << endl;
@@ -55,5 +55,9 @@ FileCacheManager:: ~FileCacheManager(){
     this->readFromCache->close();
     delete this->readFromCache;
     delete this->writeToCache;
+}
+
+CacheManager<string, string> *FileCacheManager::Clone() {
+    return new FileCacheManager();
 }
 

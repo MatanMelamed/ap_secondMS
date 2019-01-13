@@ -1,35 +1,29 @@
-//
-// Created by tomme on 12/01/2019.
-//
-
 #include "MatrixSolver.h"
 
 MatrixSolver::MatrixSolver(Searcher<Cell> *searcher) {
     this->searcher = searcher;
 }
-string MatrixSolver:: solve(SearchableMatrix* problem) {
+
+string MatrixSolver::solve(SearchableMatrix *problem) {
     std::vector<State<Cell> *> result = searcher->Search(problem);
     State<Cell> father = *result[result.size() - 2];
     State<Cell> current = *result[result.size() - 3];
-    string moves = "";
-    for (int i = result.size() - 3; i >= 0;) {
+    string moves;
+    for (int i = (int) (result.size() - 3); i >= 0;) {
         if (father.GetData().row < current.GetData().row &&
-                father.GetData().column == current.GetData().column){
-            moves = moves + DOWN;
+            father.GetData().column == current.GetData().column) {
+            moves += DOWN;
+        } else if (father.GetData().row > current.GetData().row &&
+                   father.GetData().column == current.GetData().column) {
+            moves += UP;
+        } else if (father.GetData().column < current.GetData().column &&
+                   father.GetData().row == current.GetData().row) {
+            moves += RIGHT;
+        } else if (father.GetData().column > current.GetData().column &&
+                   father.GetData().row == current.GetData().row) {
+            moves += LEFT;
         }
-        if (father.GetData().row > current.GetData().row &&
-                father.GetData().column == current.GetData().column) {
-            moves = moves + UP;
-        }
-        if (father.GetData().column < current.GetData().column &&
-            father.GetData().row == current.GetData().row    ) {
-            moves = moves + RIGHT;
-        }
-        if (father.GetData().column > current.GetData().column &&
-                father.GetData().row == current.GetData().row  ) {
-            moves = moves + LEFT;
-        }
-        moves = moves + ",";
+        moves += moves + ",";
         father = current;
         if (i > 0) {
             current = *result[--i];
@@ -42,4 +36,9 @@ string MatrixSolver:: solve(SearchableMatrix* problem) {
     }
     return moves;
 }
-MatrixSolver::~MatrixSolver(){}
+
+MatrixSolver::~MatrixSolver() {}
+
+Solver<SearchableMatrix *, string> *MatrixSolver::Clone() {
+    return new MatrixSolver(searcher->Clone());
+}

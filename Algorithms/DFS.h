@@ -23,6 +23,8 @@ public:
     DFS() : _goal(nullptr) {};
 
     std::vector<State<T> *> Search(Searchable<T> *s) override;
+
+    Searcher<T> *Clone() override;
 };
 
 template<typename T>
@@ -88,6 +90,11 @@ std::vector<State<T> *> DFS<T>::Search(Searchable<T> *s) {
     Visit(startState, s);
 
     return GetResults(s);
+}
+
+template<typename T>
+Searcher<T> *DFS<T>::Clone() {
+    return new DFS();
 }
 
 

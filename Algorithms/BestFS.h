@@ -17,6 +17,8 @@ class BestFS : public Searcher<T> {
 
 public:
     std::vector<State<T> *> Search(Searchable<T> *s) override;
+
+    Searcher<T> *Clone() override;
 };
 
 template<class T>
@@ -91,6 +93,11 @@ std::vector<State<T> *> BestFS<T>::Search(Searchable<T> *s) {
     result.push_back(devNodesIndicator);
 
     return result;
+}
+
+template<class T>
+Searcher<T> *BestFS<T>::Clone() {
+    return new BestFS();
 }
 
 

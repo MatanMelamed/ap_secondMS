@@ -33,7 +33,7 @@ public:
 
     static void *DoClient(void *args);
 
-    void open(int port, server_side::ClientHandler *c) override;
+    pthread_t open(int port, server_side::ClientHandler *c) override;
 
     void close() override;
 };

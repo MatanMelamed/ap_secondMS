@@ -8,19 +8,24 @@
 #include "../Algorithms/Cell.h"
 #include <vector>
 #include "../Algorithms/BFS.h"
-#include "../Algorithms/SearchableHeuristic.h"
+
 #define UP "Up"
 #define DOWN "Down"
 #define RIGHT "Right"
 #define LEFT "Left"
-class MatrixSolver: public Solver<SearchableMatrix*,string> {
+
+class MatrixSolver : public Solver<SearchableMatrix *, string> {
 private:
-    Searcher<Cell>* searcher;
+    Searcher<Cell> *searcher;
 public:
-    MatrixSolver(Searcher<Cell>* searcher);
-    string solve(SearchableMatrix* problem) override;
+    MatrixSolver(Searcher<Cell> *searcher);
+
     ~MatrixSolver();
+
+    string solve(SearchableMatrix *problem) override;
+
+    Solver<SearchableMatrix *, string> *Clone() override;
 };
 
 
-#endif //AP_SECONDMS_MATRIXSOLVER_H
+#endif

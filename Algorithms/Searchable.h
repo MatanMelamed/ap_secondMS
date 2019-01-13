@@ -15,6 +15,11 @@ public:
     virtual std::vector<State<T> *> GetReachable(State<T> *state) = 0;
 
     virtual State<T> *GetDummy() = 0;
+
+    virtual std::vector<std::pair<double, State<T> *>>
+    GetReachableNHeuristic(State<T> *state) = 0;
+
+    virtual double GetHeuristic(State<T> *state) = 0;
 };
 
 #endif

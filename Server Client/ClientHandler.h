@@ -9,6 +9,8 @@ namespace server_side {
 
     public:
         virtual void handleClient(TCP_client client) = 0;
+
+        virtual ClientHandler *Clone() = 0;
     };
 }
 

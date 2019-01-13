@@ -1,13 +1,14 @@
 #include "MyParallelServer.h"
 #include <pthread.h>
 
-void MyParallelServer::open(int port, server_side::ClientHandler *c) {
+pthread_t MyParallelServer::open(int port, server_side::ClientHandler *c) {
     createSocket(port);
     auto *params = new ThreadParams();
     params->_server = this;
     params->_clientHandler = c;
     pthread_t trid;
     pthread_create(&trid, nullptr, MyParallelServer::Start, params);
+    return trid;
 }
 
 void *MyParallelServer::Start(void *args) {
@@ -20,12 +21,13 @@ void *MyParallelServer::Start(void *args) {
 
         auto *cliParams = new CliThreadParams();
         cliParams->clientSock = client;
-        cliParams->handler = params->_clientHandler;
+        cliParams->handler = params->_clientHandler->Clone();
 
         params->_server->AddClient(cliParams);
     }
 
     params->_server->CloseAll();
+    delete params->_clientHandler;
     delete params;
 
     return nullptr;
@@ -34,6 +36,7 @@ void *MyParallelServer::Start(void *args) {
 void *MyParallelServer::DoClient(void *args) {
     auto *cliParams = (CliThreadParams *) args;
     cliParams->handler->handleClient(cliParams->clientSock);
+    delete cliParams->handler;
     delete cliParams;
     return nullptr;
 }

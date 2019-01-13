@@ -18,6 +18,8 @@ class BFS : public Searcher<T> {
 
 public:
     std::vector<State<T> *> Search(Searchable<T> *s) override;
+
+    Searcher<T> *Clone() override;
 };
 
 
@@ -98,5 +100,11 @@ std::vector<State<T> *> BFS<T>::GetResults(State<T> *goal, Searchable<T> *s) {
 
     return results;
 }
+
+template<typename T>
+Searcher<T> *BFS<T>::Clone() {
+    return new BFS();
+}
+
 
 #endif

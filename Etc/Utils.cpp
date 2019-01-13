@@ -1,19 +1,18 @@
 #include "Utils.h"
 
 /**
- * receives a string of doubles separated by ','.
- * returns vector of doubles with these values.
+ * receives a string of ints separated by ',' and vector of int.
+ * separate string numbers and inserts them into vector.
  */
-vector<double> StringSeparatorByComma(string input) {
+void StringSeparatorByComma(string input, vector<int> &results) {
 
-    vector<double> result;
     string currentValue;
     int index = 0;
 
     while (index < input.length()) {
         if (input[index] == ',') {
             if (!currentValue.empty()) {
-                result.push_back(stod(currentValue));
+                results.push_back(stoi(currentValue));
                 currentValue.clear();
             }
         } else {
@@ -23,10 +22,8 @@ vector<double> StringSeparatorByComma(string input) {
     }
 
     if (!currentValue.empty()) {
-        result.push_back(stod(currentValue));
+        results.push_back(stoi(currentValue));
     }
-
-    return result;
 }
 
 /***
@@ -50,10 +47,11 @@ bool UpdateCurrentFromLeftOvers(string &current_string, string &leftovers) {
             }
             index++;
         }
-        if(index == leftovers.length()){
+        if (index == leftovers.length()) {
             leftovers.clear();
-        } else{
-            leftovers = leftovers.substr(index + 1, leftovers.length() - index - 1);
+        } else {
+            leftovers = leftovers.substr(index + 1,
+                                         leftovers.length() - index - 1);
         }
     }
 

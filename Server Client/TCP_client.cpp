@@ -27,3 +27,7 @@ std::string server_side::TCP_client::GetLine() {
 void server_side::TCP_client::settimeout(int sec, int usec) {
     sock.settimeout(sec, usec);
 }
+
+void server_side::TCP_client::Send(std::string message) {
+    Guard(write(sock.sock_fd, message.c_str(), message.size()),ERR_SEND);
+}

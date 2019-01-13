@@ -1,13 +1,15 @@
 #include <cstring>
 #include "MySerialServer.h"
 
-void MySerialServer::open(int port, server_side::ClientHandler *c) {
+pthread_t MySerialServer::open(int port, server_side::ClientHandler *c) {
     createSocket(port);
+    SetTimeout(DEF_TIMEOUT);
     auto *params = new ThreadParams();
     params->_server = this;
     params->_clientHandler = c;
     pthread_t trid;
     pthread_create(&trid, nullptr, MySerialServer::Start, params);
+    return trid;
 }
 
 void *MySerialServer::Start(void *args) {
@@ -23,10 +25,6 @@ void *MySerialServer::Start(void *args) {
     params->_server->CloseSock();
 
     return nullptr;
-}
-
-MySerialServer::MySerialServer() {
-    SetTimeout(DEF_TIMEOUT);
 }
 
 void MySerialServer::close() {

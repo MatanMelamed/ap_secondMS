@@ -1,7 +1,3 @@
-//
-// Created by tomme on 04/01/2019.
-//
-
 #ifndef AP_SECONDMS_FILECACHEMANAGER_H
 #define AP_SECONDMS_FILECACHEMANAGER_H
 
@@ -11,28 +7,36 @@
 #include <fstream>
 #include <vector>
 
+#define CACHE_FILE "cache.txt"
+
 using namespace std;
-class FileCacheManager : public CacheManager<string,string> {
+
+class FileCacheManager : public CacheManager<string, string> {
 private:
-    ofstream* writeToCache;
-    fstream* readFromCache;
-    map<string,string> loadedProblems;
-    map<string,string> newProblems;
+    ofstream *writeToCache;
+    fstream *readFromCache;
+    map<string, string> loadedProblems;
+    map<string, string> newProblems;
 
 
 public:
     //CTOR
-    FileCacheManager(){
+    FileCacheManager() {
         this->readFromCache = new fstream();
-        this->readFromCache->open("cache.txt");
+        this->readFromCache->open(CACHE_FILE);
     }
+
     bool IsSolutionExists(string problem) override;
 
     string GetSolution(string problem) override;
 
-    void SaveSolution(string problem,string solution) override;
+    void SaveSolution(string problem, string solution) override;
+
     ~FileCacheManager();
+
     vector<string> ProblemAndSolutionFromCache(string line);
+
+    CacheManager<string, string> *Clone() override;
 };
 
 
