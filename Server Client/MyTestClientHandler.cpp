@@ -35,11 +35,12 @@ SearchableMatrix MyTestClientHandler::GetMatrixRequest(server_side::TCP_client
     matrix_col = (int) matrix_data.size();
     ++matrix_row;
 
+    current = client.GetLine();
     // get all numbers including rows and exit,entrance cells.
     while (current != END_INDICATOR) {
-        current = client.GetLine();
         StringSeparatorByComma(current, matrix_data);
         ++matrix_row;
+        current = client.GetLine();
     }
 
     // Create matrix
