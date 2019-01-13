@@ -32,7 +32,7 @@ public:
 
     void SaveSolution(string problem, string solution) override;
 
-    ~FileCacheManager();
+    ~FileCacheManager() override;
 
     vector<string> ProblemAndSolutionFromCache(string line);
 

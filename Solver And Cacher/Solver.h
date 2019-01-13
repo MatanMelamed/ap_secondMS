@@ -10,6 +10,8 @@ public:
     virtual Solution solve(Problem problem) = 0;
 
     virtual Solver *Clone() = 0;
+
+    virtual ~Solver() = default;
 };
 
 

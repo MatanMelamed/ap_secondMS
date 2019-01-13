@@ -20,7 +20,7 @@ public:
 
     bool isExist(State<T> *state) const;
 
-    bool empty() const { return _set.size(); }
+    bool empty() const { return _set.empty(); }
 
     int size() const;
 

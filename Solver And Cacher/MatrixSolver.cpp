@@ -37,8 +37,11 @@ string MatrixSolver::solve(SearchableMatrix *problem) {
     return moves;
 }
 
-MatrixSolver::~MatrixSolver() {}
+MatrixSolver::~MatrixSolver() {
+    delete searcher;
+}
 
 Solver<SearchableMatrix *, string> *MatrixSolver::Clone() {
     return new MatrixSolver(searcher->Clone());
 }
+

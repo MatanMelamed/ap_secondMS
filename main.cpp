@@ -1,72 +1,66 @@
-#include "Server Client/MySerialServer.h"
 #include "Server Client/MyTestClientHandler.h"
 #include "Solver And Cacher/StringReverser.h"
 #include "Solver And Cacher/FileCacheManager.h"
+#include "Server Client/MyParallelServer.h"
+#include "Algorithms/BestFS.h"
 
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <errno.h>
 #include <cstdlib>
+#include <pthread.h>
 #include <iostream>
+
+#include "Etc/client.h"
 
 using namespace std;
 
-void g(){
-    MySerialServer s;
 
+void g() {
+    MyParallelServer s;
     MyTestClientHandler c = MyTestClientHandler(new StringReverser(),
                                                 new FileCacheManager());
-    pthread_t thread = s.open(5404, &c);
 
-    pthread_join(thread, nullptr);
+    try {
+        pthread_t thread = s.open(5404, &c);
+
+        cin.get();
+        s.close();
+        pthread_join(thread, nullptr);
+    } catch (MyException &ex) {
+        std::cout << ex.GetMessage() << "\n";
+        std::cout << ex.GetError().what();
+    }
 }
 
+void f();
 
-void f() {
-
-
-
-    int port = 5404;
-    int s = socket(AF_INET, SOCK_STREAM, 0);
-    struct sockaddr_in serv;
-    serv.sin_addr.s_addr = INADDR_ANY;
-    serv.sin_port = htons(port);
-    serv.sin_family = AF_INET;
-    if (bind(s, (sockaddr *) &serv, sizeof(serv)) < 0) {
-        cerr << "Bad!" << endl;
-    }
-
-    int new_sock;
-    listen(s, 5);
-    struct sockaddr_in client;
-    socklen_t clilen = sizeof(client);
-
-    timeval timeout;
-    timeout.tv_sec = 10;
-    timeout.tv_usec = 0;
-
-    setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (char *) &timeout, sizeof(timeout));
-
-    new_sock = accept(s, (struct sockaddr *) &client, &clilen);
-    if (new_sock < 0) {
-        if (errno == EWOULDBLOCK) {
-            cout << "timeout!" << endl;
-            exit(2);
-        } else {
-            perror("other error");
-            exit(3);
-        }
-    }
-    cout << new_sock << endl;
-    cout << s << endl;
-    close(new_sock);
-    close(s);
-}
 int main() {
 
     f();
 
-
     return 0;
+}
+
+void f() {
+    BestFS<Cell> bfs;
+
+    SearchableMatrix m(5, 5);
+
+    std::vector<int> data = {1, 8, 1, 1, 1,
+                             1, 8, 1, 8, 1,
+                             1, 8, 1, 8, 1,
+                             1, 8, 1, 8, 1,
+                             1, 1, 1, 8, 1,};
+    m.SetData(data);
+    m.SetInitialState({0, 0});
+    m.SetInitialState({4, 4});
+
+    std::vector<State<Cell> *> r = bfs.Search(&m);
+
+    std::cin.get();
+    std::cout << "";
+
+
 }

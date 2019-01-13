@@ -12,6 +12,8 @@ public:
     virtual void SaveSolution(Problem problem, Solution solution) = 0;
 
     virtual CacheManager *Clone() = 0;
+
+    virtual ~CacheManager() = default;
 };
 
 #endif

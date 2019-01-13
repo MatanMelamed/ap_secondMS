@@ -14,6 +14,8 @@ public:
 
     Solver<string, string> *Clone() override;
 
+    ~StringReverser() override = default;
+
 };
 
 #endif

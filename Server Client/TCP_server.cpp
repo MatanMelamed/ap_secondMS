@@ -3,10 +3,11 @@
 server_side::TCP_client server_side::TCP_server::Accept() {
     sockaddr_in addr{};
     socklen_t len = sizeof(addr);
-    std::cout<<"stated waiting";
+    std::cout << "TCP_server::Accept() waiting for client.\n";
     int client_sock_fd = ::accept(_sock.sock_fd, (sockaddr *) &addr,
                                   &len);
-    std::cout<<"ended waiting";
+    std::cout << "TCP_server::Accept() got client: " << client_sock_fd << "\n";
+
     if (client_sock_fd < 0) {
         if (errno == EAGAIN || errno == EWOULDBLOCK) {
             throw MyException(ERR_ACCEPT_TIMEOUT);

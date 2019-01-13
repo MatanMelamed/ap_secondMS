@@ -9,3 +9,4 @@ string StringReverser::solve(string problem) {
 Solver<string, string> *StringReverser::Clone() {
     return new StringReverser();
 }
+

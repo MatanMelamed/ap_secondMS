@@ -20,11 +20,13 @@ private:
 public:
     MatrixSolver(Searcher<Cell> *searcher);
 
-    ~MatrixSolver();
+    ~MatrixSolver() override;
 
     string solve(SearchableMatrix *problem) override;
 
     Solver<SearchableMatrix *, string> *Clone() override;
+
+
 };
 
 

@@ -11,6 +11,8 @@ namespace server_side {
         virtual void handleClient(TCP_client client) = 0;
 
         virtual ClientHandler *Clone() = 0;
+
+        virtual ~ClientHandler() = default;
     };
 }
 

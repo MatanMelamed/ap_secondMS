@@ -13,7 +13,7 @@
 #define ERR_ACCEPT "failure on accept"
 #define ERR_ACCEPT_TIMEOUT "timeout on accept"
 #define DEF_PORT -1
-#define DEF_TIMEOUT 1
+#define DEF_TIMEOUT 0
 
 namespace server_side {
 
@@ -25,9 +25,7 @@ namespace server_side {
         bool _ready;
 
     public:
-        TCP_server() : _sock(), _ready(false), _shouldStop(false) {
-            std::cout<<"called tcp server";
-        };
+        TCP_server() : _sock(), _ready(false), _shouldStop(false) {};
 
         // Base Class function
         void createSocket(int port);

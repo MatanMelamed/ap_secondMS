@@ -14,9 +14,14 @@ void MyTestClientHandler::handleClient(server_side::TCP_client clientSock) {
     // build matrix
     //SearchableMatrix matrix = GetMatrixRequest(clientSock);
     //std::string matrixString = matrix.toString();
+
     std::string current = clientSock.GetLine();
+    std::string answer;
     while (current != END_INDICATOR) {
-        clientSock.Send(GetAnswer(current));
+        std::cout << "client handler::GetLine() returned: " << current << "\n";
+        answer = GetAnswer(current);
+        std::cout << "client handler::GetAnswer() returned: " << answer << "\n";
+        clientSock.Send(answer);
         current = clientSock.GetLine();
     }
     // ask cache and solver
@@ -73,4 +78,9 @@ std::string MyTestClientHandler::GetAnswer(std::string problem) {
         _manager->SaveSolution(problem, solution);
     }
     return solution;
+}
+
+MyTestClientHandler::~MyTestClientHandler() {
+    /*delete _solver;
+    delete _manager;*/
 }

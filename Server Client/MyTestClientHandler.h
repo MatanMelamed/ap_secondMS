@@ -24,6 +24,7 @@ public:
 
     ClientHandler *Clone() override;
 
+    ~MyTestClientHandler() override;
 };
 
 
