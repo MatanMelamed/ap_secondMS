@@ -1,5 +1,5 @@
-#ifndef AP_SECONDMS_BFS_H
-#define AP_SECONDMS_BFS_H
+#ifndef AP_SECONDMS_BestFS_H
+#define AP_SECONDMS_BestFS_H
 
 #include "Searcher.h"
 #include "PStatePriQue.h"

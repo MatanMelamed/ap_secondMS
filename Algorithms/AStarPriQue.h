@@ -9,8 +9,8 @@
 
 template<class T>
 struct AStarState {
-    double totalValue;
-    double heuristic;
+    int totalValue;
+    int heuristic;
     State<T> *state;
 
     bool operator<(const AStarState &r) const {

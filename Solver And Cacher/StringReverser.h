@@ -6,6 +6,8 @@
 #include <iostream>
 #include <algorithm>
 
+using namespace std;
+
 class StringReverser : public Solver<string, string> {
 public:
     StringReverser() = default;

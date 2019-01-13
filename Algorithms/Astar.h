@@ -45,9 +45,9 @@ std::vector<State<T> *> Astar<T>::Search(Searchable<T> *s) {
             _goal = current;
             break;
         }
-        std::vector<std::pair<double, State<T> *>> neighbors =
+        std::vector<std::pair<int, State<T> *>> neighbors =
                 s->GetReachableNHeuristic(current);
-        for (std::pair<double, State<T> *> neighbor : neighbors) {
+        for (std::pair<int, State<T> *> neighbor : neighbors) {
             if (IsNew(neighbor.second)) {
                 open.Push(AStarState<T>({neighbor.first +
                                          neighbor.second->GetCost(),

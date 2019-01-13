@@ -14,6 +14,8 @@
 #define RIGHT "Right"
 #define LEFT "Left"
 
+using namespace std;
+
 class MatrixSolver : public Solver<SearchableMatrix *, string> {
 private:
     Searcher<Cell> *searcher;

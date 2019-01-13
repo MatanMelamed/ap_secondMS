@@ -100,17 +100,6 @@ SearchableMatrix &SearchableMatrix::operator=(const SearchableMatrix &other) {
 }
 
 // Class Specific Functions
-State<Cell> *SearchableMatrix::GetStateInOffSetOf(State<Cell> *base,
-                                                  int xDir,
-                                                  int yDir) {
-    State<Cell> *result = nullptr;
-    if (xDir < _rowLength && yDir < _colLength) {
-        if (_matrix[xDir][yDir] != WALL_VAL) {
-            result = new State<Cell>({xDir, yDir}, _matrix[xDir][yDir], base);
-        }
-    }
-    return result;
-}
 
 void SearchableMatrix::LoadValidMovements() {
     if (_validMovements.empty()) {
@@ -212,7 +201,7 @@ std::string SearchableMatrix::toString() {
     return matrixFormat;
 }
 
-double SearchableMatrix::GetHeuristic(State<Cell> *state) {
+int SearchableMatrix::GetHeuristic(State<Cell> *state) {
 
     double result;
     auto it = heuristics.find(state->GetData());
@@ -231,10 +220,10 @@ double SearchableMatrix::GetHeuristic(State<Cell> *state) {
     return result;
 }
 
-std::vector<std::pair<double, State<Cell> *>>
+std::vector<std::pair<int, State<Cell> *>>
 SearchableMatrix::GetReachableNHeuristic(State<Cell> *state) {
 
-    std::vector<std::pair<double, State<Cell> *>> result;
+    std::vector<std::pair<int, State<Cell> *>> result;
 
     std::vector<State<Cell> *> neighbors = GetReachable(state);
     for (State<Cell> *neighbor : neighbors) {

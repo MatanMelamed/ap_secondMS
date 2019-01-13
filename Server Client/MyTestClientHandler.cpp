@@ -1,6 +1,7 @@
 #include "MyTestClientHandler.h"
 
-MyTestClientHandler::MyTestClientHandler(Solver<string, string> *solver,
+MyTestClientHandler::MyTestClientHandler(Solver<SearchableMatrix *, string>
+                                         *solver,
                                          CacheManager<string, string> *manager)
         : _solver(solver), _manager(manager) {}
 
@@ -12,19 +13,13 @@ server_side::ClientHandler *MyTestClientHandler::Clone() {
 void MyTestClientHandler::handleClient(server_side::TCP_client clientSock) {
 
     // build matrix
-    //SearchableMatrix matrix = GetMatrixRequest(clientSock);
-    //std::string matrixString = matrix.toString();
+    SearchableMatrix matrix = GetMatrixRequest(clientSock);
 
-    std::string current = clientSock.GetLine();
-    std::string answer;
-    while (current != END_INDICATOR) {
-        std::cout << "client handler::GetLine() returned: " << current << "\n";
-        answer = GetAnswer(current);
-        std::cout << "client handler::GetAnswer() returned: " << answer << "\n";
-        clientSock.Send(answer);
-        current = clientSock.GetLine();
-    }
     // ask cache and solver
+    string results = GetAnswer(&matrix);
+
+    // return answer
+    clientSock.Send(results);
 }
 
 SearchableMatrix MyTestClientHandler::GetMatrixRequest(server_side::TCP_client
@@ -69,13 +64,14 @@ SearchableMatrix MyTestClientHandler::GetMatrixRequest(server_side::TCP_client
     return matrix;
 }
 
-std::string MyTestClientHandler::GetAnswer(std::string problem) {
+std::string MyTestClientHandler::GetAnswer(SearchableMatrix *matrix) {
+    std::string matrix_string = matrix->toString();
     std::string solution;
-    if (_manager->IsSolutionExists(problem)) {
-        solution = _manager->GetSolution(problem);
+    if (_manager->IsSolutionExists(matrix_string)) {
+        solution = _manager->GetSolution(matrix_string);
     } else {
-        solution = _solver->solve(problem);
-        _manager->SaveSolution(problem, solution);
+        solution = _solver->solve(matrix);
+        _manager->SaveSolution(matrix_string, solution);
     }
     return solution;
 }

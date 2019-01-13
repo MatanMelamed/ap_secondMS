@@ -29,16 +29,12 @@ protected:
     Cell _entrance;
     State<Cell> _exitStateIndicator;
     std::list<Cell> _validMovements;
-    std::unordered_map<Cell, double> heuristics;
+    std::unordered_map<Cell, int> heuristics;
 
 
     SearchableMatrix() = default;   // Cannot be used externally
 
     void AllocateMatrix();
-
-    State<Cell> *GetStateInOffSetOf(State<Cell> *base,
-                                    int xDir,
-                                    int yDir);
 
     void LoadValidMovements();
 
@@ -82,10 +78,10 @@ public:
 
     std::string toString();
 
-    std::vector<std::pair<double, State<Cell> *>>
+    std::vector<std::pair<int, State<Cell> *>>
     GetReachableNHeuristic(State<Cell> *state) override;
 
-    double GetHeuristic(State<Cell> *state) override;
+    int GetHeuristic(State<Cell> *state) override;
 
 };
 

@@ -16,10 +16,10 @@ public:
 
     virtual State<T> *GetDummy() = 0;
 
-    virtual std::vector<std::pair<double, State<T> *>>
+    virtual std::vector<std::pair<int, State<T> *>>
     GetReachableNHeuristic(State<T> *state) = 0;
 
-    virtual double GetHeuristic(State<T> *state) = 0;
+    virtual int GetHeuristic(State<T> *state) = 0;
 };
 
 #endif

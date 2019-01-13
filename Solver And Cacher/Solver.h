@@ -1,8 +1,6 @@
 #ifndef AP_SECONDMS_SOLVER_H
 #define AP_SECONDMS_SOLVER_H
 
-using namespace std;
-
 template<class Problem, class Solution>
 class Solver {
 
