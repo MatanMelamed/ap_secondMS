@@ -3,7 +3,7 @@
 
 #include <sys/socket.h>
 #include <unistd.h>
-#include "../MyException.h"
+#include "../Etc/MyException.h"
 
 #define ERR_OPEN "failure on opening socket"
 #define ERR_CLOSE "failure on closing socket"

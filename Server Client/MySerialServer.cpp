@@ -8,63 +8,29 @@ void MySerialServer::open(int port, server_side::ClientHandler *c) {
     params->_clientHandler = c;
     pthread_t trid;
     pthread_create(&trid, nullptr, MySerialServer::Start, params);
-    _servThrd = trid;
-}
-
-void MySerialServer::createSocket(int port) {
-
-    _serverSocket = Guard(socket(AF_INET, SOCK_STREAM, 0), ERR_SCK_OPN);
-    int flags = Guard(fcntl(_serverSocket, F_GETFL), ERR_SCK_FLG_GET);
-    Guard(fcntl(_serverSocket, F_SETFL, flags | O_NONBLOCK), ERR_SCK_FLG_SET);
-
-    bzero((char *) &serv_addr, sizeof(serv_addr));
-
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = INADDR_ANY;
-    serv_addr.sin_port = htons(static_cast<uint16_t>(port));
-
-    /* Now bind the host address using bind() call.*/
-    Guard(bind(_serverSocket, (struct sockaddr *) &serv_addr,
-               sizeof(serv_addr)), ERR_SCK_BND);
 }
 
 void *MySerialServer::Start(void *args) {
     auto *params = (ThreadParams *) args;
 
-    while (!params->_server->ShouldStop()) {
-        params->_server->waitForClient();
+    params->_server->listen(SOMAXCONN);
 
-        if (params->_server->IsConnectedToClient()) {
-            params->_server->CommunicateWithClient(params->_clientHandler);
-        }
+    while (!params->_server->ShouldStop()) {
+        server_side::TCP_client client = params->_server->Accept();
+        params->_clientHandler->handleClient(client);
     }
+
+    params->_server->CloseSock();
 
     return nullptr;
 }
 
-void MySerialServer::waitForClient() {
-
-    listen(_serverSocket, MAX_CNT);
-
-    while (!ShouldStop()) {
-        // check once, if no requests but without error, then sleep, else error.
-        _clientSocket = accept(_serverSocket, nullptr, nullptr);
-        if (_clientSocket == ERROR_NO) {
-            if (errno == EWOULDBLOCK) {
-                sleep(WAIT_INTERVAL);
-            } else {
-                throw MyException(ERR_SCK_ACPT);
-            }
-        } else {
-            break;
-        }
-    }
+MySerialServer::MySerialServer() {
+    SetTimeout(DEF_TIMEOUT);
 }
 
-
-void MySerialServer::CommunicateWithClient(server_side::ClientHandler *c) {
-    c->handleClient(_clientSocket);
-    _clientSocket = ERROR_NO;
+void MySerialServer::close() {
+    _shouldStop = true;
 }
 
 

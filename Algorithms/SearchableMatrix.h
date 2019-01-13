@@ -3,7 +3,7 @@
 
 #include <list>
 
-#include "../MyException.h"
+#include "../Etc/MyException.h"
 #include "Searchable.h"
 #include "Cell.h"
 

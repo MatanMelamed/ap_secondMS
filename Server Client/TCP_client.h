@@ -1,13 +1,16 @@
 #ifndef AP_SECONDMS_TCP_CLIENT_H
 #define AP_SECONDMS_TCP_CLIENT_H
 
+#include <strings.h>
+
 #include "TCP_client.h"
-#include "../Utils.h"
+#include "../Etc/Utils.h"
 #include "TCP_socket.h"
 
 #define DEF_SIZE 256
 
 #define ERR_READ "failure on reading from socket"
+#define ERR_READ_TIMEOUT "reading timeout has reached"
 
 namespace server_side {
 
@@ -22,34 +25,15 @@ namespace server_side {
 
     public:
 
+        TCP_client() {};
+
         TCP_client(TCP_socket sock) : sock(sock) {}
 
-        std::string GetLine() {
-            int numOfReceivedBytes;
-            int bufferLen = (int) sizeof(buffer);
-            for (;;) {
-                bzero(buffer, bufferLen);
-                numOfReceivedBytes = (int) read(sock.sock_fd, buffer,
-                                                bufferLen - 1);
-                if(errno == EAGAIN || errno = EWOULDBLOCK){
-                    throw
-                }
-                if (ManageStrings(buffer, current_string, leftovers)) {
-                    std::string line = current_string;
-                    current_string.clear();
-                    return line;
-                    break;
-                }
-            }
-        }
+        std::string GetLine();
 
-        void settimeout(int sec, int usec = 0) {
-            sock.settimeout(sec, usec);
-        }
+        void settimeout(int sec, int usec = 0);
 
-        void close() {
-            sock.close();
-        }
+        void close() { sock.close(); }
     };
 }
 #endif

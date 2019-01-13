@@ -9,17 +9,15 @@
 int Guard(int check, const std::string &message, int error = DEF_ERROR);
 
 class MyException {
-
     std::string _message;
-
-    MyException() = default;;
+    std::system_error _error;
 
 public:
-    explicit MyException(const std::string &message) {
-        this->_message = message;
-    }
+    explicit MyException(const std::string &message);
 
-    std::string get() { return _message; }
+    std::string GetMessage() { return _message; }
+
+    std::system_error GetError() { return _error; }
 };
 
 #endif

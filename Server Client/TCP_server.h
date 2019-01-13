@@ -4,41 +4,46 @@
 #include <arpa/inet.h>
 
 #include "TCP_socket.h"
-#include "../MyException.h"
+#include "../Etc/MyException.h"
+#include "TCP_client.h"
+#include "Server.h"
 
 #define ERR_BIND "failure on bind"
 #define ERR_LISTEN "failure on listen"
+#define ERR_ACCEPT "failure on accept"
+#define ERR_ACCEPT_TIMEOUT "timeout on accept"
+#define DEF_PORT -1
+#define DEF_TIMEOUT 5
 
 namespace server_side {
 
-    class TCP_server {
+    class TCP_server : public Server {
 
     protected:
-        TCP_socket sock;
+        TCP_socket _sock;
+        bool _shouldStop;
+        bool _ready;
 
     public:
-        TCP_server(int port) {
-            sockaddr_in addr_in{};
-            addr_in.sin_family = AF_INET;
-            addr_in.sin_addr.s_addr = INADDR_ANY;
-            addr_in.sin_port = htons(static_cast<uint16_t>(port));
+        TCP_server() : _sock(DEF_PORT), _ready(false), _shouldStop(false) {};
 
-            Guard(bind(sock.sock_fd, (sockaddr *) &addr_in, sizeof(addr_in)),
-                  ERR_BIND);
-        }
+        // Base Class function
+        void createSocket(int port);
 
-        void listen(int max_lis) {
-            Guard(::listen(sock.sock_fd, max_lis), ERR_LISTEN);
-        }
+        void listen(int max_lis);
 
-        void settimeout(int sec, int usec = 0) {
-            sock.settimeout(sec, usec);
-        }
+        void SetTimeout(int sec, int usec = 0) { _sock.settimeout(sec, usec); }
 
-        void close() {
-            sock.close();
-        }
+        void CloseSock() { _sock.close(); }
 
+        TCP_client Accept();
+
+        bool ShouldStop() { return _shouldStop; }
+
+        // Interface function
+        void open(int port, ClientHandler *c) override = 0;
+
+        void close() override = 0;
     };
 }
 
