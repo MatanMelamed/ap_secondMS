@@ -17,7 +17,7 @@ class DFS : public Searcher<T> {
 
     std::vector<State<T> *> GetResults(Searchable<T> *s);
 
-    void Visit(State<T> *state, Searchable<T> *s);
+    bool Visit(State<T> *state, Searchable<T> *s);
 
 public:
     DFS() : _goal(nullptr) {};
@@ -67,20 +67,34 @@ std::vector<State<T> *> DFS<T>::GetResults(Searchable<T> *s) {
 }
 
 template<typename T>
-void DFS<T>::Visit(State<T> *state, Searchable<T> *s) {
-    if (s->isGoal(state)) { _goal = state; }
+bool DFS<T>::Visit(State<T> *state, Searchable<T> *s) {
+
+    bool foundAnswer = false;
+
+    if (s->isGoal(state)) {
+        _goal = state;
+        return true;
+    }
 
     _grays.insert(state);       // change color to gray
 
     std::vector<State<T> *> neighbors = s->GetReachable(state);
+
     for (State<T> *neighbor : neighbors) {
-        if (IsWhite(neighbor)) {
-            Visit(neighbor, s);
+        if (!foundAnswer && IsWhite(neighbor)) {
+            if (Visit(neighbor, s)) {
+                foundAnswer = true;
+            }
+
+        } else {
+            delete neighbor;
         }
     }
 
     _grays.erase(state);        // change color to black
     _blacks.insert(state);
+
+    return foundAnswer;
 }
 
 template<typename T>

@@ -53,14 +53,18 @@ std::vector<State<T> *> Astar<T>::Search(Searchable<T> *s) {
                                          neighbor.second->GetCost(),
                                          neighbor.first,
                                          neighbor.second}));
+                neighbor.second = nullptr;
             } else if (open.isExist(neighbor.second)) {
                 State<T> *oldNeighbor = open.GetState(neighbor.second);
                 if (oldNeighbor->GetCost() > neighbor.second->GetCost()) {
                     open.Update(neighbor.second);
+                    neighbor.second = nullptr;
                 }
             }
+            if (neighbor.second != nullptr) {
+                delete neighbor.second;
+            }
         }
-
         close.insert(current);
     }
 

@@ -105,9 +105,9 @@ SearchableMatrix &SearchableMatrix::operator=(const SearchableMatrix &other) {
 void SearchableMatrix::LoadValidMovements() {
     if (_validMovements.empty()) {
         _validMovements.push_back({1, 0});
+        _validMovements.push_back({0, 1});
         _validMovements.push_back({-1, 0});
         _validMovements.push_back({0, -1});
-        _validMovements.push_back({0, 1});
     }
 }
 
@@ -189,7 +189,7 @@ State<Cell> *SearchableMatrix::GetDummy() {
 }
 
 std::string SearchableMatrix::toString() {
-    std::string matrixFormat = "SP" + this->GetInitialState()->toString();
+    std::string matrixFormat = "SP" + this->_entrance.toString();
     matrixFormat = matrixFormat + "EP" + this->_exitStateIndicator.toString();
     matrixFormat = matrixFormat + "RL" + std::to_string(_rowLength);
     matrixFormat = matrixFormat + "CL" + std::to_string(_colLength);

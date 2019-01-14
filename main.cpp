@@ -3,9 +3,14 @@
 #include "Solver And Cacher/MatrixSolver.h"
 #include "Solver And Cacher/FileCacheManager.h"
 #include "Algorithms/Astar.h"
+#include "Algorithms/DFS.h"
 
+#define ERR_NO_PORT "Program must receive port number"
 
-void f() {
+int main(int argc, char **argv) {
+
+    if (argc == 1) { throw MyException(ERR_NO_PORT); }
+
 
     MySerialServer server;
 
@@ -18,30 +23,6 @@ void f() {
 
     pthread_join(trid, nullptr);
 
-}
-
-
-void g() {
-
-    SearchableMatrix m(3, 5);
-    std::vector<int> data = {1, -1, 1, 1, 1,
-                             1, -1, 1, -1, 1,
-                             1, 1, 1, -1, 1};
-    m.SetData(data);
-    m.SetInitialState({0, 0});
-    m.SetExitState({2, 4});
-
-    auto *astar = new Astar<Cell>();
-    auto *solver = new MatrixSolver(astar);
-    std::string results = solver->solve(&m);
-    std::cout << results;
-
-
-}
-
-int main() {
-
-    g();
     return 0;
 }
 

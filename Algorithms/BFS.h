@@ -49,7 +49,10 @@ std::vector<State<T> *> BFS<T>::Search(Searchable<T> *s) {
             if (IsWhite(neighbor)) {
                 _grays.insert(neighbor);
                 queue.push(neighbor);
+            } else {
+                delete neighbor;
             }
+
         }
 
         _grays.erase(current);

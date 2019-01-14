@@ -1,6 +1,0 @@
-#ifndef AP_SECONDMS_TRYSERV_H
-#define AP_SECONDMS_TRYSERV_H
-
-
-
-#endif
