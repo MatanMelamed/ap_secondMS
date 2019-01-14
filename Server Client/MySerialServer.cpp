@@ -24,6 +24,8 @@ void *MySerialServer::Start(void *args) {
     }
 
     params->_server->CloseSock();
+    delete params->_clientHandler;
+    delete params;
 
     return nullptr;
 }

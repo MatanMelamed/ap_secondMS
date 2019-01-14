@@ -68,9 +68,10 @@ SearchableMatrix::~SearchableMatrix() {
     if (_matrix != nullptr) {
         for (int i = 0; i < _rowLength; ++i) {
             if (_matrix[i] != nullptr) {
-                delete _matrix[i];
+                delete[] _matrix[i];
             }
         }
+        delete[] _matrix;
     }
 }
 

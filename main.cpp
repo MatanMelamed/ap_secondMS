@@ -8,17 +8,13 @@
 void f() {
 
     MySerialServer server;
-    Astar<Cell> astar;
-    MatrixSolver solver(&astar);
-    FileCacheManager manager;
 
-    MyTestClientHandler handler(&solver, &manager);
+    auto *astar = new Astar<Cell>();
+    auto *solver = new MatrixSolver(astar);
+    auto *manager = new FileCacheManager();
+    auto *handler = new MyTestClientHandler(solver, manager);
 
-    pthread_t trid = server.open(5404, &handler);
-
-    std::cin.get();
-    std::cout << "force closing\n";
-    server.close();
+    pthread_t trid = server.open(5405, handler);
 
     pthread_join(trid, nullptr);
 

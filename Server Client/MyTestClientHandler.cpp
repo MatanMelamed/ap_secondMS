@@ -49,9 +49,9 @@ SearchableMatrix MyTestClientHandler::GetMatrixRequest(server_side::TCP_client
 
     // Set Exit and Entrance by the 4 last numbers received.
     int last_index = (int) matrix_data.size() - 1;
-    matrix.SetExitState({matrix_data[last_index], matrix_data[last_index - 1]});
-    matrix.SetInitialState({matrix_data[last_index - 2],
-                            matrix_data[last_index - 3]});
+    matrix.SetExitState({matrix_data[last_index - 1], matrix_data[last_index]});
+    matrix.SetInitialState({matrix_data[last_index - 3],
+                            matrix_data[last_index - 2]});
 
     // remove the 4 last numbers received
     matrix_data.pop_back();
