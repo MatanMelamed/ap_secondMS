@@ -3,7 +3,7 @@
 
 pthread_t MySerialServer::open(int port, server_side::ClientHandler *c) {
     createSocket(port);
-    SetTimeout(DEF_TIMEOUT);
+    SetTimeout(NO_TIMEOUT);
     auto *params = new ThreadParams();
     params->_server = this;
     params->_clientHandler = c;
@@ -17,6 +17,7 @@ void *MySerialServer::Start(void *args) {
 
     params->_server->listen(SOMAXCONN);
     server_side::TCP_client client = params->_server->Accept();
+    params->_server->SetTimeout(DEF_TIMEOUT);
 
     while (!params->_server->ShouldStop()) {
         params->_clientHandler->handleClient(client);

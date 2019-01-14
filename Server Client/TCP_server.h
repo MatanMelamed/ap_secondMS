@@ -11,7 +11,8 @@
 #define ERR_BIND "failure on bind"
 #define ERR_LISTEN "failure on listen"
 #define ERR_ACCEPT "failure on accept"
-#define DEF_TIMEOUT 15
+#define DEF_TIMEOUT 1
+#define NO_TIMEOUT 0
 
 namespace server_side {
 

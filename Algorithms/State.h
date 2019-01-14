@@ -6,12 +6,12 @@
 template<class T> // must have operator == !!!
 class State {
     T _uniqueData;
-    double _cost;
+    int _cost;
     State<T> *_cameFrom;
 
 public:
     explicit State(T state,
-                   double cost = 0,
+                   int cost = 0,
                    State<T> *cameFrom = nullptr) : _uniqueData(state),
                                                    _cost(cost),
                                                    _cameFrom(cameFrom) {}
@@ -24,11 +24,11 @@ public:
         return this->_cost < right._cost;
     }
 
-    double GetCost() const {
+    int GetCost() const {
         return _cost;
     }
 
-    void SetCost(double cost) {
+    void SetCost(int cost) {
         this->_cost = cost;
     }
 
@@ -52,7 +52,8 @@ public:
         os << "_uniqueData: " << state._uniqueData << " _cost: " << state._cost;
         return os;
     }
-    std:: string toString(){
+
+    std::string toString() {
         return _uniqueData.toString();
     }
 

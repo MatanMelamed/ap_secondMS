@@ -3,7 +3,7 @@
 
 pthread_t MyParallelServer::open(int port, server_side::ClientHandler *c) {
     createSocket(port);
-    SetTimeout(DEF_TIMEOUT);
+    SetTimeout(NO_TIMEOUT);
 
     auto *params = new ThreadParams();
     params->_server = this;
@@ -19,7 +19,9 @@ void *MyParallelServer::Start(void *args) {
 
     params->_server->listen(SOMAXCONN);
 
-    server_side::TCP_client client = params->_server->Accept();;
+    server_side::TCP_client client = params->_server->Accept();
+    params->_server->SetTimeout(DEF_TIMEOUT);
+
     while (!params->_server->ShouldStop()) {
 
         cliParams = new CliThreadParams();

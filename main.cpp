@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 
     pthread_join(trid, nullptr);
 
-    delete handler;
+    delete handler; // deletes its solver and manager
 
     return 0;
 }
