@@ -11,4 +11,4 @@ file(GLOB etc "Etc/*.h" "Etc/*.cpp")
 file(GLOB rootLayer "main.cpp")
 
 add_executable(ap_secondMS ${etc} ${algorithms} ${serverClient} ${rootLayer}
-        ${solverCacher} Etc/client.h "Server Client/Boot.h" "Server Client/Boot.cpp")
+        ${solverCacher} Drafts/client.h "Server Client/TCP_socket.cpp")

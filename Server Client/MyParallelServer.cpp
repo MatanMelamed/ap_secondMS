@@ -34,7 +34,6 @@ void *MyParallelServer::Start(void *args) {
     params->_server->CloseAll();
     delete params;
 
-    std::cout << "server thread finished\n";
     return nullptr;
 }
 
@@ -43,9 +42,6 @@ void MyParallelServer::AddClient(CliThreadParams *cliParams) {
     pthread_create(&newClient, nullptr, MyParallelServer::DoClient, cliParams);
 
     UpdateThreadVector(newClient);
-    std::cout << "MyParallelServer::AddClient() new cli added\n";
-    std::cout << "MyParallelServer::AddClient() vec size: "
-              << to_string(_clientThreads.size()) << "\n";
 }
 
 void MyParallelServer::UpdateThreadVector(pthread_t pthread, int operation) {

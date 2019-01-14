@@ -8,6 +8,7 @@
 #define ERR_OPEN "failure on opening socket"
 #define ERR_CLOSE "failure on closing socket"
 #define ERR_OPT "failure on setsockopt"
+
 namespace server_side {
 
     struct TCP_socket {
@@ -21,19 +22,9 @@ namespace server_side {
             this->sock_fd = open_sock_fd;
         }
 
-        void close() {
-            Guard(::close(sock_fd), ERR_CLOSE);
-        }
+        void close();
 
-        void settimeout(int sec, int usec = 0) {
-            timeval timeout{};
-            timeout.tv_sec = sec;
-            timeout.tv_usec = usec;
-
-            // setting socket option for recieve timeout
-            Guard(setsockopt(sock_fd, SOL_SOCKET, SO_RCVTIMEO,
-                             (char *) &timeout, sizeof(timeout)), ERR_OPT);
-        }
+        void settimeout(int sec, int usec = 0);
     };
 }
 #endif
