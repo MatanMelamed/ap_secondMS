@@ -62,6 +62,8 @@ SearchableMatrix MyTestClientHandler::GetMatrixRequest(server_side::TCP_client
     // set the rest as data
     matrix.SetData(matrix_data);
 
+    std::cout << matrix;
+
     return matrix;
 }
 

@@ -3,6 +3,7 @@
 
 #include <list>
 #include <unordered_map>
+#include <ostream>
 
 #include "../Etc/MyException.h"
 #include "Searchable.h"
@@ -31,7 +32,11 @@ protected:
     std::list<Cell> _validMovements;
     std::unordered_map<Cell, int> heuristics;
 
+public:
+    friend std::ostream &
+    operator<<(std::ostream &os, const SearchableMatrix &matrix);
 
+protected:
     SearchableMatrix() = default;   // Cannot be used externally
 
     void AllocateMatrix();

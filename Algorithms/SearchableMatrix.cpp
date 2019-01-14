@@ -234,4 +234,18 @@ SearchableMatrix::GetReachableNHeuristic(State<Cell> *state) {
     return result;
 }
 
+std::ostream &operator<<(std::ostream &os, const SearchableMatrix &matrix) {
+    for (int i = 0; i < matrix._rowLength; ++i) {
+        for (int j = 0; j < matrix._colLength; ++j) {
+            os << matrix._matrix[i][j] << ", ";
+        }
+        os << "\n";
+    }
+    os << " _entrance: " << matrix._entrance.row << ", "
+       << matrix._entrance.column;
+    os << " _exit: " << matrix._exitStateIndicator.GetData().row << ", "
+       << matrix._exitStateIndicator.GetData().column;
+    return os;
+}
+
 
