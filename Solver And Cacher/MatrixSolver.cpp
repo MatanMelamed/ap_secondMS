@@ -6,6 +6,10 @@ MatrixSolver::MatrixSolver(Searcher<Cell> *searcher) {
 
 string MatrixSolver::solve(SearchableMatrix *problem) {
     vector<State<Cell> *> result = searcher->Search(problem);
+    if (result.size() == 1) {
+        delete result[0];
+        return UNREADCHABLE;
+    }
     State<Cell> father = *result[1];
     State<Cell> current = *result[0];
     string moves;

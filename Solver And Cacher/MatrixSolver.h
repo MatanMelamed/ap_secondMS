@@ -13,6 +13,7 @@
 #define DOWN "Down"
 #define RIGHT "Right"
 #define LEFT "Left"
+#define UNREADCHABLE "-1"
 
 using namespace std;
 
